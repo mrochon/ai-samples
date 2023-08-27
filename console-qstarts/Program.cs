@@ -169,7 +169,7 @@ async Task Conversation(string endpoint, string key, string deploymentOrModelNam
             }
             Console.WriteLine();
         }
-
+        messages.Messages.Add(new ChatMessage(ChatRole.System, "Now start answering in English"));
         Console.WriteLine();
     } while (true);
 
