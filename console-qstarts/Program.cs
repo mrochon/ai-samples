@@ -11,23 +11,26 @@ IConfigurationRoot config = new ConfigurationBuilder()
 
 var openAI = config.GetSection("OpenAI").Get<OpenAISettings>();
 
-var type = "conversation";
+var type = "conversationwithfunctions";
 switch(type)
 {
     case "ask":
-        await Ask(openAI.Endpoint, openAI.Key, openAI.Deployment);
+        await Ask(openAI!.Endpoint, openAI.Key, openAI.Deployment);
         break;
     case "chat1":
-        await Chat1(openAI.Endpoint, openAI.Key, openAI.Deployment);
+        await Chat1(openAI!.Endpoint, openAI.Key, openAI.Deployment);
         break;
     case "chat2":
-        Chat2(openAI.Endpoint, openAI.Key, openAI.Deployment);
+        Chat2(openAI!.Endpoint, openAI.Key, openAI.Deployment);
         break;
     case "nonchat":
-        NonChat(openAI.Endpoint, openAI.Key, openAI.Deployment);
+        NonChat(openAI!.Endpoint, openAI.Key, openAI.Deployment);
         break;
     case "conversation":
-        await Conversation(openAI.Endpoint, openAI.Key, openAI.Deployment);
+        await Conversation(openAI!.Endpoint, openAI.Key, openAI.Deployment);
+        break;
+    case "conversationwithfunctions":
+        await ConversationWithFunctions(openAI!.Endpoint, openAI.Key, openAI.Deployment);
         break;
     default:
         Console.WriteLine("Bad choice!!!");
@@ -119,15 +122,15 @@ void NonChat(string endpoint, string key, string deploymentOrModelName)
                       {
                           Messages =
                           {
-                new ChatMessage(ChatRole.System, @"""You are an assistant designed to extract entities from text. Users will paste in a string of text and you will respond with entities you've extracted from the text as a JSON object. Here's an example of your output format:
-{
-   ""name"": """",
-   ""company"": """",
-   ""phone_number"": """",
-   ""subject"": """",
-}"""),
-                new ChatMessage(ChatRole.User, "Hello. My name is Robert Smith. I'm calling from Contoso Insurance, Delaware. My colleague mentioned that you are interested in learning about our comprehensive benefits policy. Please call me back at (555) 346-9322. I would like to go over the benefits."),
-            },
+                            new ChatMessage(ChatRole.System, @"""You are an assistant designed to extract entities from text. Users will paste in a string of text and you will respond with entities you've extracted from the text as a JSON object. Here's an example of your output format:
+                            {
+                               ""name"": """",
+                               ""company"": """",
+                               ""phone_number"": """",
+                               ""subject"": """",
+                            }"""),
+                            new ChatMessage(ChatRole.User, "Hello. My name is Robert Smith. I'm calling from Contoso Insurance, Delaware. My colleague mentioned that you are interested in learning about our comprehensive benefits policy. Please call me back at (555) 346-9322. I would like to go over the benefits."),
+                          },
                           MaxTokens = 100
                       });
 
@@ -176,10 +179,9 @@ async Task Conversation(string endpoint, string key, string deploymentOrModelNam
     Console.WriteLine();
 }
 
-async Task ConversationWithFunction(string endpoint, string key, string deploymentOrModelName)
+async Task ConversationWithFunctions(string endpoint, string key, string deploymentOrModelName)
 {
     OpenAIClient client = new(new Uri(openAI.Endpoint), new AzureKeyCredential(openAI.Key));
-
     var functions = new FunctionDefinition[]
     {
         new FunctionDefinition()
@@ -201,7 +203,7 @@ async Task ConversationWithFunction(string endpoint, string key, string deployme
     {
         Messages =
         {
-            new ChatMessage(ChatRole.System, "You are a helpful assistant."),
+            new ChatMessage(ChatRole.System, "Please use functions whenever possible."),
         },
         Functions = functions,
         MaxTokens = 100
@@ -224,7 +226,18 @@ async Task ConversationWithFunction(string endpoint, string key, string deployme
         {
             await foreach (ChatMessage message in choice.GetMessageStreaming())
             {
-                Console.Write(message.Content);
+                if(message.Role == ChatRole.Assistant)
+                {
+                    var function = message.FunctionCall;
+                    if(function != null)
+                    {
+                        Console.WriteLine($"Function: {function.Name}");
+                        //Console.WriteLine($"Description: {function.Description}");
+                        Console.WriteLine($"Parameters: {function.Arguments}");
+                    }
+                }
+                else
+                    Console.Write(message.Content);
             }
             Console.WriteLine();
         }
