@@ -2,6 +2,8 @@
 using Azure.AI.OpenAI;
 using Microsoft.Extensions.Configuration;
 using ConsoleApp;
+using System.Text;
+using System.Text.Json;
 
 // Create a configuration object from the json file
 IConfigurationRoot config = new ConfigurationBuilder()
@@ -209,52 +211,124 @@ async Task ConversationWithFunctions(string endpoint, string key, string deploym
         MaxTokens = 100
     };
 
+
+    var msgAdded = false;
     do
     {
-        Console.Write("User: ");
-        string? userMessage = Console.ReadLine();
-        if (string.IsNullOrEmpty(userMessage))
-            break;
-        messages.Messages.Add(new ChatMessage(ChatRole.User, userMessage));
+        if (!msgAdded)
+        {
+            Console.Write("User: ");
+            string? userMessage = Console.ReadLine();
+            if (string.IsNullOrEmpty(userMessage))
+                break;
+            messages.Messages.Add(new ChatMessage(ChatRole.User, userMessage));
+        }
+        msgAdded = false;
         Response<StreamingChatCompletions> response = await client.GetChatCompletionsStreamingAsync(
             deploymentOrModelName: deploymentOrModelName,
             messages
             );
         using StreamingChatCompletions streamingChatCompletions = response.Value;
 
+        //TDO: Handle multiple function call requests in one response
+        string funcName = String.Empty;
+        var argumentsJson= new StringBuilder();
         await foreach (StreamingChatChoice choice in streamingChatCompletions.GetChoicesStreaming())
         {
             await foreach (ChatMessage message in choice.GetMessageStreaming())
             {
-                if(message.Role == ChatRole.Assistant)
+                var function = message.FunctionCall;
+                if (function != null)
                 {
-                    var function = message.FunctionCall;
-                    if(function != null)
+                    if (!string.IsNullOrEmpty(function.Name))
                     {
-                        if(!string.IsNullOrEmpty(function.Name))
-                        {
-                            Console.WriteLine();
-                            Console.Write(function.Name);
-                        }
-                        if(!string.IsNullOrEmpty(function.Arguments))
-                        {
-                            Console.Write(function.Arguments);
-                        }
+                        funcName = function.Name;
+                    }
+                    if (!string.IsNullOrEmpty(function.Arguments))
+                    {
+                        argumentsJson.Append(function.Arguments);
                     }
                 }
                 else
                 {
-                    Console.WriteLine();
                     Console.Write(message.Content);
                 }
             }
-            Console.WriteLine();
         }
-
+        // If function call(s) was(were) returned above, call it and add response as a message
+        if (!string.IsNullOrEmpty(funcName))
+        {
+            Dictionary<string, string> args;
+            ParseFunctiondefinition(argumentsJson.ToString(), out args);
+            switch(funcName)
+            {                     
+                case "getHotels":
+                    messages.Messages.Add(new ChatMessage() 
+                    {
+                        Role = ChatRole.Assistant,
+                        FunctionCall = new FunctionCall(funcName, argumentsJson.ToString()),
+                    });
+                    messages.Messages.Add(new ChatMessage() {
+                        Role = ChatRole.Function,
+                        Name = funcName,
+                        Content = GetHotels(args["location"])
+                    });
+                    msgAdded = true;
+                    break;
+                default:
+                    messages.Messages.Add(new ChatMessage(ChatRole.Assistant, $"Function {funcName} not implemented"));
+                    break;
+            }    
+            funcName = String.Empty;
+        }
         Console.WriteLine();
     } while (true);
 
     Console.WriteLine();
+}
+
+string GetHotels(string location)
+{
+    return $"Hotels in {location}: Marriott, Hyatt, Motel 6";
+}
+
+void ParseFunctiondefinition(string json, out Dictionary<string,string> args)
+{
+    args = new Dictionary<string, string>();
+    var options = new JsonReaderOptions
+    {
+        AllowTrailingCommas = true,
+        CommentHandling = JsonCommentHandling.Skip
+    };
+    var reader = new Utf8JsonReader(Encoding.ASCII.GetBytes(json), options);
+    var propName = String.Empty;
+    while (reader.Read())
+    {
+        switch (reader.TokenType)
+        {
+            case JsonTokenType.PropertyName:
+                {
+                    propName = reader.GetString();
+                    break;
+                }
+            case JsonTokenType.String:
+                {
+                    string? text = reader.GetString();
+                    args.Add(propName!, text!);
+                    break;
+                }
+
+            case JsonTokenType.Number:
+                {
+                    //TODO: Handle other types of prop values
+                    args.Add(propName, reader.GetInt32().ToString());
+                    //int intValue = reader.GetInt32();
+                    break;
+                }
+
+                // Other token types elided for brevity
+        }
+    }
 }
 
 public class FunctionArgument
