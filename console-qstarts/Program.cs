@@ -231,13 +231,22 @@ async Task ConversationWithFunctions(string endpoint, string key, string deploym
                     var function = message.FunctionCall;
                     if(function != null)
                     {
-                        Console.WriteLine($"Function: {function.Name}");
-                        //Console.WriteLine($"Description: {function.Description}");
-                        Console.WriteLine($"Parameters: {function.Arguments}");
+                        if(!string.IsNullOrEmpty(function.Name))
+                        {
+                            Console.WriteLine();
+                            Console.Write(function.Name);
+                        }
+                        if(!string.IsNullOrEmpty(function.Arguments))
+                        {
+                            Console.Write(function.Arguments);
+                        }
                     }
                 }
                 else
+                {
+                    Console.WriteLine();
                     Console.Write(message.Content);
+                }
             }
             Console.WriteLine();
         }
