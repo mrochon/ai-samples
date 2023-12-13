@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34302.85
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SemanticKernel1", "SemanticKernel1\SemanticKernel1.csproj", "{AF362988-427E-4756-AB11-FCD7038F90BC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "plugins", "plugins", "{AF9A7318-307C-4267-BC9C-D7C4F6221CB5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AF362988-427E-4756-AB11-FCD7038F90BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF362988-427E-4756-AB11-FCD7038F90BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF362988-427E-4756-AB11-FCD7038F90BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF362988-427E-4756-AB11-FCD7038F90BC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4CEF5951-B1EE-4051-81AD-43A24632C86F}
+	EndGlobalSection
+EndGlobal

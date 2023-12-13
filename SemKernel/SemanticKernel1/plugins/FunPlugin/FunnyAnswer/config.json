@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "description": "Generate a funny answer",
+  "models": [
+    {
+      "max_tokens": 1000,
+      "temperature": 0.9,
+      "top_p": 0.0,
+      "presence_penalty": 0.0,
+      "frequency_penalty": 0.0
+    }
+  ],
+  "input": {
+    "parameters": [
+      {
+        "name": "input",
+        "description": "Question to answer",
+        "defaultValue": ""
+      },
+      {
+        "name": "style",
+        "description": "Give a hint about the desired answer style",
+        "defaultValue": "something to do with sailing"
+      }
+    ]
+  }
+}
