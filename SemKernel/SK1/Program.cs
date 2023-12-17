@@ -1,10 +1,13 @@
 ﻿// See https://aka.ms/new-console-template for more information
+// https://github.com/microsoft/semantic-kernel
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Connectors.AI.OpenAI;
 using SK1;
+using System;
 using System.Numerics;
+using static System.Net.Mime.MediaTypeNames;
 
 var appBuilder = Host.CreateApplicationBuilder(args);
 appBuilder.Configuration.Sources.Clear();
@@ -32,7 +35,7 @@ builder.AddAzureOpenAIChatCompletion(
 
 var kernel = builder.Build();
 
-var example = 3;
+var example = 4;
 
 switch (example)
 {
@@ -80,6 +83,45 @@ ChatBot:";
                 TopP = 0.5
             });
         Console.WriteLine($"Done {chat.RunAsync().Result} answers");
+        break;
+    case 4: // Memory; needs a model different from chat-gtp-35
+        const string memoryCollectionName = "SKGitHub";
+        var githubFiles = new Dictionary<string, string>()
+        {
+            ["https://github.com/mrochon/IEFPolicies/blob/main/README.md"]
+                = "README: Using IefPolicies to manage Identity Experience Policy set",
+            ["https://learn.microsoft.com/en-us/azure/active-directory-b2c/saml-service-provider?tabs=windows&pivots=b2c-custom-policy"]
+                = "Register a SAML application in Azure AD B2C",
+            ["https://learn.microsoft.com/en-us/azure/active-directory-b2c/identity-provider-generic-saml-options?pivots=b2c-custom-policy"]
+                = "Configure SAML identity provider options with Azure Active Directory B2C",
+        };
+        var memory = kernel.WithMemory(settings);
+        Console.WriteLine("Adding some web references to a volatile Semantic Memory.");
+        var i = 0;
+        foreach (var entry in githubFiles)
+        {
+            await memory.SaveReferenceAsync(
+                collection: memoryCollectionName,
+                description: entry.Value,
+                text: entry.Value,
+                externalId: entry.Key,
+                externalSourceName: "GitHub"
+            );
+            Console.WriteLine($"  URL {++i} saved");
+        }
+        string prompt = "How to add SAML IdP to my IEF journey?";
+        Console.WriteLine("===========================\n" +
+                            "Query: " + prompt + "\n");
+        var memories = memory.SearchAsync(memoryCollectionName, prompt, limit: 5, minRelevanceScore: 0.77);
+        i = 0;
+        await foreach (var m in memories)
+        {
+            Console.WriteLine($"Result {++i}:");
+            Console.WriteLine("  URL:     : " + m.Metadata.Id);
+            Console.WriteLine("  Title    : " + m.Metadata.Description);
+            Console.WriteLine("  Relevance: " + m.Relevance);
+            Console.WriteLine();
+        }
         break;
     default:
         Console.WriteLine("No valid example selected.");

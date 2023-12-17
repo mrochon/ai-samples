@@ -1,5 +1,7 @@
 ﻿using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Connectors.AI.OpenAI;
+using Microsoft.SemanticKernel.Memory;
+using Microsoft.SemanticKernel.Plugins.Memory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +25,17 @@ One line, with the fewest words.";  // was 'One line TLDR with fewest words' TLD
             {
                 Console.WriteLine(kernel.InvokeAsync(summarize, new KernelArguments(t)).Result);
             }
+        }
+        public static ISemanticTextMemory WithMemory(this Kernel kernel, Settings settings)
+        {
+            var memoryBuilder = new MemoryBuilder();
+            memoryBuilder.WithAzureOpenAITextEmbeddingGeneration(
+                    "mrtextembeddingada002", // settings.Model,
+                    "text-embedding-ada-002",
+                    settings.Endpoint,
+                    settings.Secret);
+            memoryBuilder.WithMemoryStore(new VolatileMemoryStore());
+            return memoryBuilder.Build();
         }
     }
 }

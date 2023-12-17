@@ -28,5 +28,23 @@ namespace SK1
             Console.WriteLine(plan);
             return plan;
         }
+        /*
+{{!-- Step 1: Initialize an array of date ideas --}}
+{{set "dateIdeas" (array)}}
+
+{{!-- Step 2: Add date ideas to the array --}}
+{{set "dateIdeas" (concat (get "dateIdeas") "A romantic picnic in the park,")}}
+{{set "dateIdeas" (concat (get "dateIdeas") "A candlelit dinner for two,")}}
+{{set "dateIdeas" (concat (get "dateIdeas") "A moonlit walk on the beach,")}}
+{{set "dateIdeas" (concat (get "dateIdeas") "A cozy movie night at home,")}}
+{{set "dateIdeas" (concat (get "dateIdeas") "A couples' spa day,")}}
+
+{{!-- Step 3: Create the poem using the date ideas --}}
+{{set "poem" (concat "On Valentine's day, let's have some fun," (get "dateIdeas" 0) "\n" (get "dateIdeas" 1) "\n" (get "dateIdeas" 2) "\n" (get "dateIdeas" 3) "\n" (get "dateIdeas" 4))}}
+
+{{!-- Step 4: Print the poem to the screen --}}
+{{json (get "poem")}}
+        */
+
     }
 }
