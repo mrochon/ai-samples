@@ -58,8 +58,8 @@ switch (example)
         break;
     case 2:
         var ask = "Tomorrow is Valentine's day. I need to come up with a few date ideas. My significant other likes poems so write them in the form of a poem.";
-        var plugins = new PluginsContainer(kernel, "SummarizePlugin", "WriterPlugin");
-        var plan = plugins.ShowPlanAsync(ask).Result;
+        kernel.LoadPlugins("SummarizePlugin", "WriterPlugin");
+        var plan = kernel.ShowPlanAsync(ask).Result;
         break;
     case 3:
         const string skPrompt = @"
