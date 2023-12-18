@@ -4,10 +4,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Connectors.AI.OpenAI;
+using Microsoft.SemanticKernel.Plugins.Memory;
 using SK1;
 using System;
 using System.Numerics;
 using static System.Net.Mime.MediaTypeNames;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 var appBuilder = Host.CreateApplicationBuilder(args);
 appBuilder.Configuration.Sources.Clear();
@@ -35,7 +37,7 @@ builder.AddAzureOpenAIChatCompletion(
 
 var kernel = builder.Build();
 
-var example = 4;
+var example = 1;
 
 switch (example)
 {
@@ -53,8 +55,10 @@ switch (example)
         kernel.Summarize(text1, text2);
         break;
     case 1:
-        var runningPrompts = new RunningPrompts(kernel, "Fun");
-        Console.WriteLine(await runningPrompts.Run("What is the meaning of life?", "Joke"));
+        var plugins = kernel.LoadPlugins("Fun");
+        var arguments = new KernelArguments("What is the meaning of life?");
+        var result = await kernel.InvokeAsync(plugins["Fun"]["Joke"], arguments);
+        Console.WriteLine(result);
         break;
     case 2:
         var ask = "Tomorrow is Valentine's day. I need to come up with a few date ideas. My significant other likes poems so write them in the form of a poem.";
@@ -62,27 +66,7 @@ switch (example)
         var plan = kernel.ShowPlanAsync(ask).Result;
         break;
     case 3:
-        const string skPrompt = @"
-ChatBot can have a conversation with you about any topic.
-It can give explicit instructions or say 'I don't know' if it does not have an answer.
-
-{{$history}}
-User: {{$userInput}}
-ChatBot:";
-        var chat = new Chat(
-            kernel,
-            skPrompt,
-            new KernelArguments
-            {
-                ["history"] = ""
-            },
-            new OpenAIPromptExecutionSettings
-            {
-                MaxTokens = 2000,
-                Temperature = 0.7,
-                TopP = 0.5
-            });
-        Console.WriteLine($"Done {chat.RunAsync().Result} answers");
+        Console.WriteLine($"Executed {kernel.ChatAsync().Result} interactions");
         break;
     case 4: // Memory; needs a model different from chat-gtp-35
         const string memoryCollectionName = "SKGitHub";
@@ -95,7 +79,17 @@ ChatBot:";
             ["https://learn.microsoft.com/en-us/azure/active-directory-b2c/identity-provider-generic-saml-options?pivots=b2c-custom-policy"]
                 = "Configure SAML identity provider options with Azure Active Directory B2C",
         };
-        var memory = kernel.WithMemory(settings);
+        // Memory functionality is experimental
+#pragma warning disable SKEXP0011, SKEXP0052
+        var memoryBuilder = new MemoryBuilder();
+        memoryBuilder.WithAzureOpenAITextEmbeddingGeneration(
+                settings.Model!,
+                "model-id",
+                settings.Endpoint!,
+                settings.Secret!);
+
+        memoryBuilder.WithMemoryStore(new VolatileMemoryStore());
+        var memory = memoryBuilder.Build();
         Console.WriteLine("Adding some web references to a volatile Semantic Memory.");
         var i = 0;
         foreach (var entry in githubFiles)
@@ -109,7 +103,7 @@ ChatBot:";
             );
             Console.WriteLine($"  URL {++i} saved");
         }
-        string prompt = "How to add SAML IdP to my IEF journey?";
+        var prompt = "How to add SAML IdP to my IEF journey?";
         Console.WriteLine("===========================\n" +
                             "Query: " + prompt + "\n");
         var memories = memory.SearchAsync(memoryCollectionName, prompt, limit: 5, minRelevanceScore: 0.77);

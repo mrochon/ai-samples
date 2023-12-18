@@ -14,13 +14,15 @@ namespace SK1
 {
     internal static class KernelExtensions
     {
-        public static void LoadPlugins(this Kernel kernel, params string[] pluginNames)
+        public static Dictionary<string, IKernelPlugin> LoadPlugins(this Kernel kernel, params string[] pluginNames)
         {
+            Dictionary<string, IKernelPlugin> plugins = new Dictionary<string, IKernelPlugin>();
             var pluginPath = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "..", "..", "..", "plugins");
             foreach (var plugin in pluginNames)
             {
-                kernel.ImportPluginFromPromptDirectory(Path.Combine(pluginPath, plugin));
+                plugins.Add(plugin, kernel.ImportPluginFromPromptDirectory(Path.Combine(pluginPath, plugin)));
             }
+            return plugins;
         }
 
         internal static void Summarize(this Kernel kernel, params string[] text)
@@ -31,7 +33,7 @@ One line, with the fewest words.";  // was 'One line TLDR with fewest words' TLD
 
             var summarize = kernel.CreateFunctionFromPrompt(prompt, executionSettings: new OpenAIPromptExecutionSettings { MaxTokens = 100 });
 
-            foreach(var t in text)
+            foreach (var t in text)
             {
                 Console.WriteLine(kernel.InvokeAsync(summarize, new KernelArguments(t)).Result);
             }
@@ -74,5 +76,45 @@ One line, with the fewest words.";  // was 'One line TLDR with fewest words' TLD
 {{!-- Step 4: Print the poem to the screen --}}
 {{json (get "poem")}}
 */
+
+        public static async Task<int> ChatAsync(this Kernel kernel)
+        {
+            const string prompt = @"
+ChatBot can have a conversation with you about any topic.
+It can give explicit instructions or say 'I don't know' if it does not have an answer.
+
+{{$history}}
+User: {{$userInput}}
+ChatBot:";
+            var kernelFunction = kernel.CreateFunctionFromPrompt(
+                prompt,
+                new OpenAIPromptExecutionSettings
+                {
+                    MaxTokens = 2000,
+                    Temperature = 0.7,
+                    TopP = 0.5
+                });
+            var kernelArgs = new KernelArguments
+            {
+                ["history"] = ""
+            };
+            Console.WriteLine("Start asking me questions...");
+            var responses = 0;
+            do
+            {
+                var input = Console.ReadLine();
+                if (input!.StartsWith("q", StringComparison.OrdinalIgnoreCase))
+                {
+                    break;
+                }
+                ++responses;
+                kernelArgs["userInput"] = input;
+                var answer = await kernelFunction.InvokeAsync(kernel, kernelArgs);
+                var result = $"\nUser: {input}\nMelody: {answer}\n";
+                kernelArgs["history"] += result;
+                Console.WriteLine(result);
+            } while (true);
+            return responses;
+        }
     }
 }
