@@ -1,42 +1,37 @@
 ﻿using Microsoft.SemanticKernel;
-using Microsoft.SemanticKernel.Connectors.AI.OpenAI;
 using Microsoft.SemanticKernel.Memory;
+using Microsoft.SemanticKernel.Connectors.OpenAI;
 using Microsoft.SemanticKernel.Planning.Handlebars;
-using Microsoft.SemanticKernel.Plugins.Memory;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace SK1
 {
     internal static class KernelExtensions
     {
-        public static Dictionary<string, IKernelPlugin> LoadPlugins(this Kernel kernel, params string[] pluginNames)
+        public static Dictionary<string, KernelPlugin> LoadPlugins(this Kernel kernel, params string[] pluginNames)
         {
-            Dictionary<string, IKernelPlugin> plugins = new Dictionary<string, IKernelPlugin>();
+            Dictionary<string, KernelPlugin> plugins = new Dictionary<string, KernelPlugin>();
             var pluginPath = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "..", "..", "..", "plugins");
             foreach (var plugin in pluginNames)
             {
-                plugins.Add(plugin, kernel.ImportPluginFromPromptDirectory(Path.Combine(pluginPath, plugin)));
+                plugins.Add(plugin, kernel.CreatePluginFromPromptDirectory(Path.Combine(pluginPath, plugin)));
             }
             return plugins;
         }
 
-        internal static void Summarize(this Kernel kernel, params string[] text)
+        internal static async Task<IEnumerable<string>> SummarizeAsync(this Kernel kernel, params string[] text)
         {
             var prompt = @"{{$input}}
 
 One line, with the fewest words.";  // was 'One line TLDR with fewest words' TLDR= Too Long Didn't Read
 
             var summarize = kernel.CreateFunctionFromPrompt(prompt, executionSettings: new OpenAIPromptExecutionSettings { MaxTokens = 100 });
-
-            foreach (var t in text)
-            {
-                Console.WriteLine(kernel.InvokeAsync(summarize, new KernelArguments(t)).Result);
-            }
+            var resp = new List<string>();
+            //foreach (var t in text)
+            //{
+            //   resp.Add((await kernel.InvokePromptAsync(prompt, new() { ["input"] = t })).);
+            //}
+            return null;
         }
         public static ISemanticTextMemory WithMemory(this Kernel kernel, Settings settings)
         {

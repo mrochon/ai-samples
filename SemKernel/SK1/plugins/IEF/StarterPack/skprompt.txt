@@ -1,0 +1,9 @@
+﻿Recommend which Azure B2C Git starter pack repo to use for a new project based on how will users be authenticated: locally only, via federated/social IdPs and whether MFA will be used.
+
+RECOMMENDATION MUST:
+- INCLUDE URL OF THE AZURE B2C GIT STARTER PACK REPO
+
+
++++++
+{{$input}}
++++++

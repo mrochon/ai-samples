@@ -1,0 +1,8 @@
+﻿SELECT AND RECOMMEND A SAMPLE FROM https://github.com/azure-ad-b2c/samples/tree/master/policies AND https://github.com/mrochon/b2csamples TO SUPPORT REQUIRED FEATURES
+
+RECOMMENDATION MUST:
+- LIST URL OF THE SAMPLE
+- SHOW ITS SUMMARY DESCRIPTION
++++++
+{{$input}}
++++++

@@ -3,13 +3,10 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.SemanticKernel;
-using Microsoft.SemanticKernel.Connectors.AI.OpenAI;
-using Microsoft.SemanticKernel.Plugins.Memory;
+using Microsoft.SemanticKernel.Memory;
+using Microsoft.SemanticKernel.Connectors.OpenAI;
+using Microsoft.SemanticKernel.Planning;
 using SK1;
-using System;
-using System.Numerics;
-using static System.Net.Mime.MediaTypeNames;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 var appBuilder = Host.CreateApplicationBuilder(args);
 appBuilder.Configuration.Sources.Clear();
@@ -23,25 +20,18 @@ var settings = new Settings();
 appBuilder.Configuration.Bind("AI", settings);
 
 
-var builder = new KernelBuilder();
-builder.AddAzureOpenAIChatCompletion(
-         settings.Model!,   // deployment name
-         "My model",        // model id
-         settings.Endpoint!, // Azure OpenAI Endpoint
-         settings.Secret!);      // Azure OpenAI Key
+var kernel = Kernel.CreateBuilder()
+            .AddAzureOpenAIChatCompletion(
+                 settings.Model!,   // deployment name
+                 settings.Endpoint!, // Azure OpenAI Endpoint
+                 settings.Secret!)      // Azure OpenAI Key
+            .Build();
 
-// Alternative using OpenAI
-//builder.AddOpenAIChatCompletion(
-//         "gpt-3.5-turbo",                  // OpenAI Model name
-//         "...your OpenAI API Key...");     // OpenAI API Key
-
-var kernel = builder.Build();
-
-var example = 1;
+var example = Constants.Example.Summarize;
 
 switch (example)
 {
-    case 0:
+    case Constants.Example.Summarize:
         string text1 = @"
         1st Law of Thermodynamics - Energy cannot be created or destroyed.
         2nd Law of Thermodynamics - For a spontaneous process, the entropy of the universe increases.
@@ -52,23 +42,31 @@ switch (example)
         2. The acceleration of an object depends on the mass of the object and the amount of force applied.
         3. Whenever one object exerts a force on another object, the second object exerts an equal and opposite on the first.";
 
-        kernel.Summarize(text1, text2);
+        var pluginPath = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "..", "..", "..", "plugins");
+        var plugin = kernel.CreatePluginFromPromptDirectory(Path.Combine(pluginPath, "TranslatePlugin"));
+        var transalteContent = await kernel.InvokeAsync(plugin["Basic"], new() { ["input"] = "你好，我是你的 AI 编排助手 - Semantic Kernel" });
+        Console.WriteLine(transalteContent);
+
+        //var plugin = kernel.LoadPlugins("SummarizePlugin");
+        //var summary = await kernel.InvokeAsync(plugin["SummarizePlugin"]["Summarize"], new() { ["input"] = text1 });
+        //kernel.Summarize(text1, text2);
         break;
-    case 1:
+    case Constants.Example.Joke:
         var plugins = kernel.LoadPlugins("Fun");
-        var arguments = new KernelArguments("What is the meaning of life?");
-        var result = await kernel.InvokeAsync(plugins["Fun"]["Joke"], arguments);
+        var result = await kernel.InvokeAsync(plugins["Fun"]["Joke"], new() { ["input"] = "What is the meaning of life?" });
         Console.WriteLine(result);
         break;
-    case 2:
+    case Constants.Example.Plan:
         var ask = "Tomorrow is Valentine's day. I need to come up with a few date ideas. My significant other likes poems so write them in the form of a poem.";
-        kernel.LoadPlugins("SummarizePlugin", "WriterPlugin");
+        kernel.LoadPlugins("Fun", "SummarizePlugin", "WriterPlugin");
         var plan = kernel.ShowPlanAsync(ask).Result;
+        var planResult = plan.InvokeAsync(kernel, new KernelArguments()).Result;
+        Console.WriteLine(planResult);
         break;
-    case 3:
+    case Constants.Example.Chat:
         Console.WriteLine($"Executed {kernel.ChatAsync().Result} interactions");
         break;
-    case 4: // Memory; needs a model different from chat-gtp-35
+    case Constants.Example.Memory: // Memory; needs a model different from chat-gtp-35
         const string memoryCollectionName = "SKGitHub";
         var githubFiles = new Dictionary<string, string>()
         {
@@ -116,6 +114,11 @@ switch (example)
             Console.WriteLine("  Relevance: " + m.Relevance);
             Console.WriteLine();
         }
+        break;
+    case Constants.Example.IEF:
+        ask = "What IEF policies should I use to authenticate users using either an email address or any work or school authentication.";
+        kernel.LoadPlugins("IEF");
+        //Console.WriteLine(kernel.InvokeAsync());
         break;
     default:
         Console.WriteLine("No valid example selected.");
