@@ -1,13 +1,26 @@
 {
   "schema": 1,
+  "type": "completion",
   "description": "Turn a scenario into a creative or humorous excuse to send your boss",
-  "execution_settings": [
+  "completion": [
     {
-      "max_tokens": 60,
-      "temperature": 0.5,
+      "max_tokens": 2000,
+      "temperature": 0.7,
       "top_p": 0.0,
       "presence_penalty": 0.0,
-      "frequency_penalty": 0.0
+      "frequency_penalty": 0.0,
+      "stop_sequences": [
+        "[done]"
+      ]
     }
-  ]
+  ],
+  "input": {
+    "parameters": [
+      {
+        "name": "input",
+        "description": "event needing excuse",
+        "default": ""
+      }
+    ]
+  }
 }

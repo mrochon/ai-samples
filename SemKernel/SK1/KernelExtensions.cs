@@ -19,20 +19,6 @@ namespace SK1
             return plugins;
         }
 
-        internal static async Task<IEnumerable<string>> SummarizeAsync(this Kernel kernel, params string[] text)
-        {
-            var prompt = @"{{$input}}
-
-One line, with the fewest words.";  // was 'One line TLDR with fewest words' TLDR= Too Long Didn't Read
-
-            var summarize = kernel.CreateFunctionFromPrompt(prompt, executionSettings: new OpenAIPromptExecutionSettings { MaxTokens = 100 });
-            var resp = new List<string>();
-            //foreach (var t in text)
-            //{
-            //   resp.Add((await kernel.InvokePromptAsync(prompt, new() { ["input"] = t })).);
-            //}
-            return null;
-        }
         public static ISemanticTextMemory WithMemory(this Kernel kernel, Settings settings)
         {
             var memoryBuilder = new MemoryBuilder();

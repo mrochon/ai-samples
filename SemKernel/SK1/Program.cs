@@ -1,4 +1,5 @@
 ﻿// See https://aka.ms/new-console-template for more information
+// https://github.com/kinfey/SemanticKernelCookBook
 // https://github.com/microsoft/semantic-kernel
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -27,7 +28,7 @@ var kernel = Kernel.CreateBuilder()
                  settings.Secret!)      // Azure OpenAI Key
             .Build();
 
-var example = Constants.Example.Summarize;
+var example = Constants.Example.Plan;
 
 switch (example)
 {
@@ -42,14 +43,9 @@ switch (example)
         2. The acceleration of an object depends on the mass of the object and the amount of force applied.
         3. Whenever one object exerts a force on another object, the second object exerts an equal and opposite on the first.";
 
-        var pluginPath = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "..", "..", "..", "plugins");
-        var plugin = kernel.CreatePluginFromPromptDirectory(Path.Combine(pluginPath, "TranslatePlugin"));
-        var transalteContent = await kernel.InvokeAsync(plugin["Basic"], new() { ["input"] = "你好，我是你的 AI 编排助手 - Semantic Kernel" });
-        Console.WriteLine(transalteContent);
-
-        //var plugin = kernel.LoadPlugins("SummarizePlugin");
-        //var summary = await kernel.InvokeAsync(plugin["SummarizePlugin"]["Summarize"], new() { ["input"] = text1 });
-        //kernel.Summarize(text1, text2);
+        var plugin = kernel.LoadPlugins("SummarizePlugin");
+        var summary = await kernel.InvokeAsync(plugin["SummarizePlugin"]["Summarize"], new() { ["input"] = text1 });
+        Console.WriteLine(summary);
         break;
     case Constants.Example.Joke:
         var plugins = kernel.LoadPlugins("Fun");
@@ -57,9 +53,12 @@ switch (example)
         Console.WriteLine(result);
         break;
     case Constants.Example.Plan:
-        var ask = "Tomorrow is Valentine's day. I need to come up with a few date ideas. My significant other likes poems so write them in the form of a poem.";
-        kernel.LoadPlugins("Fun", "SummarizePlugin", "WriterPlugin");
-        var plan = kernel.ShowPlanAsync(ask).Result;
+        //var ask = "Tomorrow is Valentine's day. I need to come up with a few date ideas. My significant other likes poems so write them in the form of a poem.";
+        var ask = "Check the weather in Guangzhou, use spanish to write emails abount dressing tips based on the results";
+        kernel.LoadPlugins("WriterPlugin", "EmailPlugin", "TranslatePlugin");
+        var companySearchPluginObj = new CompanySearchPlugin();
+        var companySearchPlugin = kernel.ImportPluginFromObject(companySearchPluginObj, "CompanySearchPlugin");
+        var plan = kernel.ShowPlanAsync(ask).Result; 
         var planResult = plan.InvokeAsync(kernel, new KernelArguments()).Result;
         Console.WriteLine(planResult);
         break;

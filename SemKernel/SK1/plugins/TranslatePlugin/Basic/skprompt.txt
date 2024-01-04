@@ -1,1 +1,1 @@
-﻿Translate  {{$input}} to English
+Translate  {{$input}} to English
