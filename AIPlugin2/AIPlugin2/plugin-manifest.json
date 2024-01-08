@@ -1,0 +1,17 @@
+{
+    "schema_version": "v1",
+    "name_for_model": "FlightsPlugin",
+    "name_for_human": "Flights Plugin",
+    "description_for_model": "List airports to which an airlines flies to from a particular airport.",
+    "description_for_human": "Returns lists of airports serviced by an airline from a particular airport.",
+    "auth": {
+        "type": "none"
+    },
+    "api": {
+        "type": "openapi",
+        "url": "{url}/swagger.json"
+    },
+    "logo_url": "{url}/logo.png",
+    "contact_email": "support@example.com",
+    "legal_info_url": "http://www.example.com/legal"
+}

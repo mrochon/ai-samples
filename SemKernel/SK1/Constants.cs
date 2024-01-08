@@ -15,7 +15,8 @@ namespace SK1
             Plan,
             Chat,
             Memory,
-            IEF
+            IEF,
+            CorePlugin
         }
     }
 }

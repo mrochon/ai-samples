@@ -7,7 +7,9 @@ using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Memory;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
 using Microsoft.SemanticKernel.Planning;
+using Microsoft.SemanticKernel.Plugins.Core;
 using SK1;
+using System.Buffers.Text;
 
 var appBuilder = Host.CreateApplicationBuilder(args);
 appBuilder.Configuration.Sources.Clear();
@@ -28,7 +30,7 @@ var kernel = Kernel.CreateBuilder()
                  settings.Secret!)      // Azure OpenAI Key
             .Build();
 
-var example = Constants.Example.Plan;
+var example = Constants.Example.CorePlugin;
 
 switch (example)
 {
@@ -119,6 +121,38 @@ switch (example)
         kernel.LoadPlugins("IEF");
         //Console.WriteLine(kernel.InvokeAsync());
         break;
+    case Constants.Example.CorePlugin:
+        // https://learn.microsoft.com/en-us/semantic-kernel/agents/plugins/out-of-the-box-plugins?tabs=Csharp
+        kernel.ImportPluginFromType<TimePlugin>();
+        const string promptTemplate = @"
+Today is: {{Date}}
+Current time is: {{Time}}
+
+Answer to the following questions using JSON syntax, including the data used.
+Is it morning, afternoon, evening, or night (morning/afternoon/evening/night)?
+Is it weekend time (weekend/not weekend)?";
+
+        var results = await kernel.InvokePromptAsync(promptTemplate);
+        Console.WriteLine(results);
+        break;
+
+//        {
+//            "time": {
+//                "hour": 10,
+//                  "minute": 51,
+//                  "second": 15
+//              },
+//          "dayOfWeek": "Thursday"
+//        }
+
+//        Based on the current time and day of the week, the answers to the questions are as follows:
+
+//          {
+//              "morningOrAfternoonOrEveningOrNight": "morning",
+//              "weekendTime": "not weekend"
+//          }
+
+
     default:
         Console.WriteLine("No valid example selected.");
         break;
