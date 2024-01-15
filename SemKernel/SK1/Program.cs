@@ -60,7 +60,8 @@ switch (example)
         kernel.LoadPlugins("WriterPlugin", "EmailPlugin", "TranslatePlugin");
         var companySearchPluginObj = new CompanySearchPlugin();
         var companySearchPlugin = kernel.ImportPluginFromObject(companySearchPluginObj, "CompanySearchPlugin");
-        var plan = kernel.ShowPlanAsync(ask).Result; 
+        var plan = kernel.ShowPlanAsync(ask).Result;
+#pragma warning disable SKEXP0060
         var planResult = plan.InvokeAsync(kernel, new KernelArguments()).Result;
         Console.WriteLine(planResult);
         break;
@@ -79,7 +80,7 @@ switch (example)
                 = "Configure SAML identity provider options with Azure Active Directory B2C",
         };
         // Memory functionality is experimental
-#pragma warning disable SKEXP0011, SKEXP0052
+#pragma warning disable SKEXP0011, SKEXP0052, SKEXP0003
         var memoryBuilder = new MemoryBuilder();
         memoryBuilder.WithAzureOpenAITextEmbeddingGeneration(
                 settings.Model!,

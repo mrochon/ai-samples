@@ -1,0 +1,10 @@
+Create a web search url to get the current weather forecast for a {{$city}}.
+searchUrl: 
+
+Example:
+city: Phoenix
+searchUrl: https://www.msn.com/en-us/weather/forecast/in-Phoenix,AZ
+
+city: Seattle
+searchUrl: https://www.msn.com/en-us/weather/forecast/in-Seattle,WA
+

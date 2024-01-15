@@ -35,7 +35,7 @@ namespace SK1
         {
             var planner = new HandlebarsPlanner();
             var plan = await planner.CreatePlanAsync(kernel, prompt);
-
+            plan.I
             Console.WriteLine("Original plan:\n");
             Console.WriteLine(plan);
             return plan;

@@ -1,0 +1,6 @@
+{
+    "type": "azure",
+    "model": "mrdeployment01",
+    "endpoint": "https://mrtestai.openai.azure.com/",
+    "org": ""
+  }

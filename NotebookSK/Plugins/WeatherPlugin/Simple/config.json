@@ -1,0 +1,20 @@
+{
+    "schema": 1,
+    "type": "completion",
+    "description": "Create search url for a city",
+    "completion": {
+      "max_tokens": 200,
+      "temperature": 0.6,
+      "presence_penalty": 0.0,
+      "frequency_penalty": 0.0
+    },
+    "input": {
+      "parameters": [
+        {
+          "name": "city",
+          "description": "Name of the city for which weather forecast is needed",
+          "defaultValue": "New York"
+        }
+      ]
+    }    
+}
