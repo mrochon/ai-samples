@@ -397,3 +397,4 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 NotebookSK/config/secrets.json
+NotebookAI/config/secrets.json
