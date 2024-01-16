@@ -158,13 +158,15 @@ async Task ConversationWithFunctions(string endpoint, string key, string deploym
             })
         }
     };
-    var messages = new ChatCompletionsOptions(deploymentOrModelName, new ChatRequestMessage[]
+    var options = new ChatCompletionsOptions(deploymentOrModelName, new ChatRequestMessage[]
     {
         new ChatRequestSystemMessage("Please use functions whenever possible."),
     })
     { 
+        ChoiceCount = 1,
         Functions = functions,
-        MaxTokens = 100
+        MaxTokens = 100,
+        ResponseFormat = ChatCompletionsResponseFormat.Text,
     };
  
     var msgAdded = false;
@@ -176,44 +178,54 @@ async Task ConversationWithFunctions(string endpoint, string key, string deploym
             string? userMessage = Console.ReadLine();
             if (string.IsNullOrEmpty(userMessage))
                 break;
-            messages.Messages.Add(new ChatRequestUserMessage(userMessage));
+            options.Messages.Add(new ChatRequestUserMessage(userMessage));
         }
         msgAdded = false;
-        StreamingResponse<StreamingChatCompletionsUpdate> response = await client.GetChatCompletionsStreamingAsync(messages);
-        //TDO: Handle multiple function call requests in one response
-        string funcName = String.Empty;
-        var argumentsJson= new StringBuilder();
-        await foreach (var choice in response)
+        using (StreamingResponse<StreamingChatCompletionsUpdate> response = await client.GetChatCompletionsStreamingAsync(options))
         {
-            Console.Write($"Response type: {choice.Role}");
+            //TDO: Handle multiple function call requests in one response
+            string funcName = String.Empty;
+            var argumentsJson = new StringBuilder();
+            await foreach (var choice in response.EnumerateValues())
+            {
+                Console.WriteLine($"Response type: {choice.Role}");
+                if (choice != null)
+                {
+                    if (choice.ContentUpdate != null)
+                    {
+                        Console.Write($"{choice.ChoiceIndex} - {choice.ContentUpdate}");
+                        Console.WriteLine();
+                    }
+                }
+            }
+            // If function call(s) was(were) returned above, call it and add response as a message
+            //if (!string.IsNullOrEmpty(funcName))
+            //{
+            //    Dictionary<string, string> args;
+            //    ParseFunctiondefinition(argumentsJson.ToString(), out args);
+            //    switch(funcName)
+            //    {                     
+            //        case "getHotels":
+            //            messages.Messages.Add(new ChatRequestMessage() 
+            //            {
+            //                Role = ChatRole.Assistant,
+            //                FunctionCall = new FunctionCall(funcName, argumentsJson.ToString()),
+            //            });
+            //            messages.Messages.Add(new ChatRequestUserMessage() {
+            //                Role = ChatRole.Function,
+            //                Name = funcName,
+            //                Content = GetHotels(args["location"])
+            //            });
+            //            msgAdded = true;
+            //            break;
+            //        default:
+            //            messages.Messages.Add(new ChatRequestAssistantMessage(ChatRole.Assistant, $"Function {funcName} not implemented"));
+            //            break;
+            //    }    
+            //    funcName = String.Empty;
+            //}
+            Console.WriteLine();
         }
-        // If function call(s) was(were) returned above, call it and add response as a message
-        //if (!string.IsNullOrEmpty(funcName))
-        //{
-        //    Dictionary<string, string> args;
-        //    ParseFunctiondefinition(argumentsJson.ToString(), out args);
-        //    switch(funcName)
-        //    {                     
-        //        case "getHotels":
-        //            messages.Messages.Add(new ChatRequestMessage() 
-        //            {
-        //                Role = ChatRole.Assistant,
-        //                FunctionCall = new FunctionCall(funcName, argumentsJson.ToString()),
-        //            });
-        //            messages.Messages.Add(new ChatRequestUserMessage() {
-        //                Role = ChatRole.Function,
-        //                Name = funcName,
-        //                Content = GetHotels(args["location"])
-        //            });
-        //            msgAdded = true;
-        //            break;
-        //        default:
-        //            messages.Messages.Add(new ChatRequestAssistantMessage(ChatRole.Assistant, $"Function {funcName} not implemented"));
-        //            break;
-        //    }    
-        //    funcName = String.Empty;
-        //}
-        Console.WriteLine();
     } while (true);
 
     Console.WriteLine();
