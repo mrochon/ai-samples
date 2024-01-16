@@ -133,13 +133,13 @@ public static class Settings
     public static (bool useAzureOpenAI, string model, string azureEndpoint, string apiKey, string bingApiKey, string orgId)
         LoadFromFile(string configFile = DefaultConfigFile)
     {
-        if (!File.Exists(DefaultConfigFile))
+        if (!System.IO.File.Exists(DefaultConfigFile))
         {
             Console.WriteLine("Configuration not found: " + DefaultConfigFile);
             Console.WriteLine("\nPlease run the Setup Notebook (0-AI-settings.ipynb) to configure your AI backend first.\n");
             throw new Exception("Configuration not found, please setup the notebooks first using notebook 0-AI-settings.pynb");
         }
-        if (!File.Exists(DefaultConfigFile.Replace("settings.", "secrets.")))
+        if (!System.IO.File.Exists(DefaultConfigFile.Replace("settings.", "secrets.")))
         {
             Console.WriteLine("Secrets not found: " + DefaultConfigFile.Replace("settings.", "secrets."));
             Console.WriteLine("\nPlease run the Setup Notebook (0-AI-settings.ipynb) to configure your AI backend first.\n");
@@ -148,8 +148,8 @@ public static class Settings
 
         try
         {
-            var config = JsonSerializer.Deserialize<Dictionary<string, string>>(File.ReadAllText(DefaultConfigFile));
-            var secrets = JsonSerializer.Deserialize<Dictionary<string, string>>(File.ReadAllText(DefaultConfigFile.Replace("settings.", "secrets.")));
+            var config = JsonSerializer.Deserialize<Dictionary<string, string>>(System.IO.File.ReadAllText(DefaultConfigFile));
+            var secrets = JsonSerializer.Deserialize<Dictionary<string, string>>(System.IO.File.ReadAllText(DefaultConfigFile.Replace("settings.", "secrets.")));
             bool useAzureOpenAI = config[TypeKey] == "azure";
             string model = config[ModelKey];
             string azureEndpoint = config[EndpointKey];
@@ -170,12 +170,12 @@ public static class Settings
     // Delete settings file
     public static void Reset(string configFile = DefaultConfigFile)
     {
-        if (!File.Exists(configFile)) { return; }
+        if (!System.IO.File.Exists(configFile)) { return; }
 
         try
         {
-            File.Delete(configFile);
-            File.Delete(configFile.Replace("settings.", "secrets."));
+            System.IO.File.Delete(configFile);
+            System.IO.File.Delete(configFile.Replace("settings.", "secrets."));
             Console.WriteLine("Settings deleted. Run the notebook again to configure your AI backend.");
         }
         catch (Exception e)
@@ -198,7 +198,7 @@ public static class Settings
 
         try
         {
-            if (File.Exists(configFile))
+            if (System.IO.File.Exists(configFile))
             {
                 (useAzureOpenAI, model, azureEndpoint, apiKey, bingApiKey, orgId) = LoadFromFile(configFile);
             }
@@ -245,8 +245,8 @@ public static class Settings
                 };
 
                 var options = new JsonSerializerOptions { WriteIndented = true };
-                File.WriteAllText(configFile, JsonSerializer.Serialize(data, options));
-                File.WriteAllText(configFile.Replace("settings.", "secrets."), JsonSerializer.Serialize(secretData, options));
+                System.IO.File.WriteAllText(configFile, JsonSerializer.Serialize(data, options));
+                System.IO.File.WriteAllText(configFile.Replace("settings.", "secrets."), JsonSerializer.Serialize(secretData, options));
             }
         }
         catch (Exception e)
@@ -255,11 +255,11 @@ public static class Settings
         }
 
         // If asked then delete the credentials stored on disk
-        if (!StoreConfigOnFile && File.Exists(configFile))
+        if (!StoreConfigOnFile && System.IO.File.Exists(configFile))
         {
             try
             {
-                File.Delete(configFile);
+                System.IO.File.Delete(configFile);
             }
             catch (Exception e)
             {

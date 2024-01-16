@@ -1,0 +1,11 @@
+{{!-- Step 1: Set the email content --}}
+{{set "content" "Hello, I hope you're having a great day!"}}
+
+{{!-- Step 2: Set the email recipients --}}
+{{set "recipients" "suiramor@gmail.com"}}
+
+{{!-- Step 3: Set the email subject --}}
+{{set "subject" "Hello from Handlebars"}}
+
+{{!-- Step 4: Send the email --}}
+{{email-SendEmail content=content recipients=recipients subject=subject}}
