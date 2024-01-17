@@ -185,17 +185,20 @@ async Task ConversationWithFunctions(string endpoint, string key, string deploym
         {
             //TDO: Handle multiple function call requests in one response
             string funcName = String.Empty;
-            var argumentsJson = new StringBuilder();
+            var arguments = new StringBuilder();
             await foreach (var choice in response.EnumerateValues())
             {
-                Console.WriteLine($"Response type: {choice.Role}");
-                if (choice != null)
+                //Console.WriteLine($"Response role: {choice.Role}");
+                if(choice.FunctionName != null)
                 {
-                    if (choice.ContentUpdate != null)
-                    {
-                        Console.Write($"{choice.ChoiceIndex} - {choice.ContentUpdate}");
-                        Console.WriteLine();
-                    }
+                    funcName = choice.FunctionName;
+                    arguments = new StringBuilder();
+                } else if(choice.FunctionArgumentsUpdate != null)
+                {
+                    arguments.Append(choice.FunctionArgumentsUpdate);
+                } else if(choice.ContentUpdate != null)
+                {
+                    arguments.Append(choice.ContentUpdate);
                 }
             }
             // If function call(s) was(were) returned above, call it and add response as a message
@@ -224,6 +227,10 @@ async Task ConversationWithFunctions(string endpoint, string key, string deploym
             //    }    
             //    funcName = String.Empty;
             //}
+            if (!String.IsNullOrEmpty(funcName))
+                Console.WriteLine($"{funcName}({arguments})");
+            else if (arguments.Length > 0)
+                Console.WriteLine(arguments);
             Console.WriteLine();
         }
     } while (true);
