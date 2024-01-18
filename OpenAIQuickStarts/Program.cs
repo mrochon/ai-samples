@@ -12,8 +12,10 @@ IConfigurationRoot config = new ConfigurationBuilder()
     .Build();
 
 var openAI = config.GetSection("OpenAI").Get<OpenAISettings>();
+if (string.IsNullOrEmpty(openAI?.Endpoint) || string.IsNullOrEmpty(openAI?.Key) || string.IsNullOrEmpty(openAI?.Deployment))
+    throw new Exception("One or more OpenAI settings are not configured");
 
-var type = "conversationwithfunctions";
+var type = "chatWithTools";
 switch(type)
 {
     case "ask":
@@ -30,6 +32,9 @@ switch(type)
         break;
     case "conversationwithfunctions":
         await ConversationWithFunctions(openAI!.Endpoint, openAI.Key, openAI.Deployment);
+        break;
+    case "chatWithTools":
+        await ChatWithTools.Run(openAI!);
         break;
     default:
         Console.WriteLine("Bad choice!!!");
@@ -141,6 +146,33 @@ async Task Conversation(string endpoint, string key, string deploymentOrModelNam
 async Task ConversationWithFunctions(string endpoint, string key, string deploymentOrModelName)
 {
     OpenAIClient client = new(new Uri(openAI.Endpoint), new AzureKeyCredential(openAI.Key));
+
+
+    var getWeatherTool = new ChatCompletionsFunctionToolDefinition()
+    {
+        Name = "get_current_weather",
+        Description = "Get the current weather in a given location",
+        Parameters = BinaryData.FromObjectAsJson(
+    new
+    {
+        Type = "object",
+        Properties = new
+        {
+            Location = new
+            {
+                Type = "string",
+                Description = "The city and state, e.g. San Francisco, CA",
+            },
+            Unit = new
+            {
+                Type = "string",
+                Enum = new[] { "celsius", "fahrenheit" },
+            }
+        },
+        Required = new[] { "location" },
+    },
+    new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }),
+    };
     var functions = new FunctionDefinition[]
     {
         new FunctionDefinition()
@@ -150,10 +182,11 @@ async Task ConversationWithFunctions(string endpoint, string key, string deploym
             Parameters = BinaryData.FromObjectAsJson(new
             {
                 type = "object",
-                properties =  new Dictionary<string,FunctionArgument>{
-                    { "location", new FunctionArgument{ type = "string", description = "The location of the hotel (i.e. Seattle, WA)" } },
-                    { "max_price", new FunctionArgument{ type = "number", description = "The maximum price for the hotel" } },
-                    { "features", new FunctionArgument{ type = "string", description = "A comma separated list of features (i.e. beachfront, free wifi, etc.)" } }
+                required = new[] { "location" },
+                properties =  new {
+                    location = new { type = "string", description = "The location of the hotel (i.e. Seattle, WA)" } ,
+                    max_price = new { type = "number", description = "The maximum price for the hotel" } ,
+                    features = new { type = "string", description = "A comma separated list of features (i.e. beachfront, free wifi, etc.)" } 
                 }
             })
         }
@@ -181,110 +214,33 @@ async Task ConversationWithFunctions(string endpoint, string key, string deploym
             options.Messages.Add(new ChatRequestUserMessage(userMessage));
         }
         msgAdded = false;
-        using (StreamingResponse<StreamingChatCompletionsUpdate> response = await client.GetChatCompletionsStreamingAsync(options))
+        var response = await client.GetChatCompletionsAsync(options);
+        foreach(var choice in response.Value.Choices)
         {
-            //TDO: Handle multiple function call requests in one response
-            string funcName = String.Empty;
-            var arguments = new StringBuilder();
-            await foreach (var choice in response.EnumerateValues())
+            Console.WriteLine($"[{choice.Message.Role}]: {choice.Message.Content}");
+            if (choice.FinishReason == CompletionsFinishReason.FunctionCall)
             {
-                //Console.WriteLine($"Response role: {choice.Role}");
-                if(choice.FunctionName != null)
+                Console.WriteLine($"{choice.Message.FunctionCall.Name}({choice.Message.FunctionCall.Arguments})");
+                switch (choice.Message.FunctionCall.Name)
                 {
-                    funcName = choice.FunctionName;
-                    arguments = new StringBuilder();
-                } else if(choice.FunctionArgumentsUpdate != null)
-                {
-                    arguments.Append(choice.FunctionArgumentsUpdate);
-                } else if(choice.ContentUpdate != null)
-                {
-                    arguments.Append(choice.ContentUpdate);
+                    case "getHotels":
+                        var p = choice.Message.FunctionCall.Arguments;
+                        options.Messages.Add(new ChatRequestToolMessage(GetHotels(p), "x"));
+                        msgAdded = true;
+                        break;
+                    default:
+                        Console.WriteLine("Function not found");
+                        break;
                 }
             }
-            // If function call(s) was(were) returned above, call it and add response as a message
-            //if (!string.IsNullOrEmpty(funcName))
-            //{
-            //    Dictionary<string, string> args;
-            //    ParseFunctiondefinition(argumentsJson.ToString(), out args);
-            //    switch(funcName)
-            //    {                     
-            //        case "getHotels":
-            //            messages.Messages.Add(new ChatRequestMessage() 
-            //            {
-            //                Role = ChatRole.Assistant,
-            //                FunctionCall = new FunctionCall(funcName, argumentsJson.ToString()),
-            //            });
-            //            messages.Messages.Add(new ChatRequestUserMessage() {
-            //                Role = ChatRole.Function,
-            //                Name = funcName,
-            //                Content = GetHotels(args["location"])
-            //            });
-            //            msgAdded = true;
-            //            break;
-            //        default:
-            //            messages.Messages.Add(new ChatRequestAssistantMessage(ChatRole.Assistant, $"Function {funcName} not implemented"));
-            //            break;
-            //    }    
-            //    funcName = String.Empty;
-            //}
-            if (!String.IsNullOrEmpty(funcName))
-                Console.WriteLine($"{funcName}({arguments})");
-            else if (arguments.Length > 0)
-                Console.WriteLine(arguments);
-            Console.WriteLine();
         }
+        Console.WriteLine();
     } while (true);
 
     Console.WriteLine();
 }
 
-string GetHotels(string location)
+string GetHotels(string parameters)
 {
-    return $"Hotels in {location}: Marriott, Hyatt, Motel 6";
-}
-
-void ParseFunctiondefinition(string json, out Dictionary<string,string> args)
-{
-    args = new Dictionary<string, string>();
-    var options = new JsonReaderOptions
-    {
-        AllowTrailingCommas = true,
-        CommentHandling = JsonCommentHandling.Skip
-    };
-    var reader = new Utf8JsonReader(Encoding.ASCII.GetBytes(json), options);
-    var propName = String.Empty;
-    while (reader.Read())
-    {
-        switch (reader.TokenType)
-        {
-            case JsonTokenType.PropertyName:
-                {
-                    propName = reader.GetString();
-                    break;
-                }
-            case JsonTokenType.String:
-                {
-                    string? text = reader.GetString();
-                    args.Add(propName!, text!);
-                    break;
-                }
-
-            case JsonTokenType.Number:
-                {
-                    //TODO: Handle other types of prop values
-                    args.Add(propName, reader.GetInt32().ToString());
-                    //int intValue = reader.GetInt32();
-                    break;
-                }
-
-                // Other token types elided for brevity
-        }
-    }
-    
-}
-
-public class FunctionArgument
-{
-    public string description { get; set; }
-    public string type { get; set; }
+    return $"Hotels in Seattle: Marriott, Hyatt, Motel 6";
 }
