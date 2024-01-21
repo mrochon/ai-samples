@@ -1,0 +1,11 @@
+{{!-- Step 1: Create variable to store the system description --}}
+{{set "systemDescription" "a single web application showing html content"}}
+
+{{!-- Step 2: Call IdentityPlugin-Applications helper to get the list of application types --}}
+{{set "applicationTypes" (IdentityPlugin-Applications)}}
+
+{{!-- Step 3: Loop through the application types and print them --}}
+Application Types:
+{{#each applicationTypes}}
+- {{this}}
+{{/each}}
