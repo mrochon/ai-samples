@@ -1,3 +1,2 @@
-Here is my system description: it consists of a single web application showing html content.
 
 The system consists of a number of components: an Angular app using Microsoft Graph and a desktop application using Azure Storage and my own API.
