@@ -19,6 +19,7 @@ namespace SK1
             return plugins;
         }
 
+#pragma warning disable SKEXP0011, SKEXP0052, SKEXP0003, SKEXP0060
         public static ISemanticTextMemory WithMemory(this Kernel kernel, Settings settings)
         {
             var memoryBuilder = new MemoryBuilder();
@@ -35,7 +36,6 @@ namespace SK1
         {
             var planner = new HandlebarsPlanner();
             var plan = await planner.CreatePlanAsync(kernel, prompt);
-            plan.I
             Console.WriteLine("Original plan:\n");
             Console.WriteLine(plan);
             return plan;

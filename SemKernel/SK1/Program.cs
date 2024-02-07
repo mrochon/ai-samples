@@ -30,7 +30,7 @@ var kernel = Kernel.CreateBuilder()
                  settings.Secret!)      // Azure OpenAI Key
             .Build();
 
-var example = Constants.Example.CorePlugin;
+var example = Constants.Example.Plan;
 
 switch (example)
 {
@@ -124,6 +124,7 @@ switch (example)
         break;
     case Constants.Example.CorePlugin:
         // https://learn.microsoft.com/en-us/semantic-kernel/agents/plugins/out-of-the-box-plugins?tabs=Csharp
+#pragma warning disable SKEXP0050
         kernel.ImportPluginFromType<TimePlugin>();
         const string promptTemplate = @"
 Today is: {{Date}}
