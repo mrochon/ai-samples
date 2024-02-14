@@ -34,7 +34,7 @@ namespace SK1
 
         public static async Task<HandlebarsPlan> ShowPlanAsync(this Kernel kernel, string prompt)
         {
-            var planner = new HandlebarsPlanner();
+            var planner = new HandlebarsPlanner() { };
             var plan = await planner.CreatePlanAsync(kernel, prompt);
             Console.WriteLine("Original plan:\n");
             Console.WriteLine(plan);

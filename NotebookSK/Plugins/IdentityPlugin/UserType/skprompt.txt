@@ -1,0 +1,10 @@
+﻿Users may access the application either as employees of a company or on their own behalf. You should respond with one the following: 'employees', 'individuals', or 'both'. 
+If you are unsure, please respond with 'both'.
+
+Description: This application is used by my employees.
+User type: employees
+
+Description: This application is used by people buying my products.
+User type: individuals
+
+Description:{{$input}}
