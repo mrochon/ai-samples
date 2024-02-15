@@ -1,0 +1,8 @@
+{{!-- Step 1: Define the search query --}}
+{{set "query" "Seattle weather"}}
+
+{{!-- Step 2: Call the search-BingSearchUrl helper with the query --}}
+{{set "searchUrl" (search-BingSearchUrl query)}}
+
+{{!-- Step 3: Output the search URL --}}
+{{json searchUrl}}
