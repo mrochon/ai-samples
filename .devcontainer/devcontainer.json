@@ -2,19 +2,14 @@
 {
 	"name": "AI Stuff",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "mcr.microsoft.com/powershell:lts-debian-11",
-	"features": {
-		"ghcr.io/devcontainers/features/common-utils:2": {
-			"installZsh": "true",
-			"username": "vscode",
-			"upgradePackages": "false",
-			"nonFreePackages": "true"
-		}
+    "image": "mcr.microsoft.com/devcontainers/dotnet:0-7.0",
+    "features": {
+      "ghcr.io/devcontainers/features/dotnet:1": {}
 	},
 
 	// "onCreateCommand": "sudo pwsh -Command{install-module IefPolicies -force}",
 
-	// "postCreateCommand": "sudo chsh vscode -s \"$(which pwsh)\"; pwsh -c \"install-module IefPolicies -force\"",
+    "postCreateCommand": "dotnet restore",
 
 	// Configure tool-specific properties.
 	"customizations": {
