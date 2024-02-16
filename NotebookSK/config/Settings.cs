@@ -19,6 +19,7 @@ public static class Settings
     private const string SecretKey = "apikey";
     private const string BingApiKey = "bingKey";
     private const string OrgKey = "org";
+    private const string MongoConnKey = "mongoDbConnectionString";
     private const bool StoreConfigOnFile = true;
 
     // Prompt user for Azure Endpoint URL
@@ -220,6 +221,31 @@ public static class Settings
         }
 
         return (useAzureOpenAI, model, azureEndpoint, apiKey, bingApiKey, orgId);
+    }
+
+    public static string MongoDbConnectionString
+    {
+        get
+        {
+            var configFile = DefaultConfigFile.Replace("settings.", "secrets.");
+            try
+            {
+                if (System.IO.File.Exists(configFile))
+                {
+                    var config = JsonSerializer.Deserialize<Dictionary<string, string>>(System.IO.File.ReadAllText(configFile));
+                    return config[MongoConnKey];
+                } else
+                {
+                    Console.WriteLine("secrets.json not found");
+                    throw new Exception("secrets.json not found");
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                throw;
+            }
+        }
     }
 
     // Write settings to file
