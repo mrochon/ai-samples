@@ -227,6 +227,8 @@ public static class Settings
     {
         get
         {
+            var conn = Environment.GetEnvironmentVariable("AZURE_MONGODB_CONNECTION");
+            if (conn != null) return conn;
             var configFile = DefaultConfigFile.Replace("settings.", "secrets.");
             try
             {
