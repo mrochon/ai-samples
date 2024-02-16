@@ -16,13 +16,12 @@ public class MongoDbService
     private readonly MongoClient _client;
     private readonly IMongoDatabase _database;
 
-    private readonly IMongoCollection<Book> _books;
-
     private readonly IMongoCollection<Product> _products;
     private readonly IMongoCollection<Customer> _customers;
     private readonly IMongoCollection<SalesOrder> _salesOrders;
     private readonly IMongoCollection<Session> _sessions;
     private readonly IMongoCollection<Message> _messages;
+    private readonly IMongoCollection<Book> _books;
     private readonly string _vectorIndexType;
     private readonly int _maxVectorSearchResults = default;
     
@@ -49,7 +48,7 @@ public class MongoDbService
         ArgumentException.ThrowIfNullOrEmpty(maxVectorSearchResults);
         ArgumentException.ThrowIfNullOrEmpty(vectorIndexType);
 
-
+        //TODO: support arbitrary collectionNames
         _openAiService = openAiService;
         _logger = logger;
 
@@ -58,17 +57,16 @@ public class MongoDbService
         _maxVectorSearchResults = int.TryParse(maxVectorSearchResults, out _maxVectorSearchResults) ? _maxVectorSearchResults : 10;
         _vectorIndexType = vectorIndexType;
 
+        _products = _database.GetCollection<Product>("products");
+        _customers = _database.GetCollection<Customer>("customers");
+        _salesOrders = _database.GetCollection<SalesOrder>("salesOrders");
+        _sessions = _database.GetCollection<Session>("completions");
+        _messages = _database.GetCollection<Message>("completions");
         _books = _database.GetCollection<Book>("books");
-        //_products = _database.GetCollection<Product>("products");
-        //_customers = _database.GetCollection<Customer>("customers");
-        //_salesOrders = _database.GetCollection<SalesOrder>("salesOrders");
-        //_sessions = _database.GetCollection<Session>("completions");
-        //_messages = _database.GetCollection<Message>("completions");
 
-        CreateVectorIndexIfNotExists("books", _vectorIndexType);
-        //CreateVectorIndexIfNotExists("products", _vectorIndexType);
-        //CreateVectorIndexIfNotExists("customers", _vectorIndexType);
-        //CreateVectorIndexIfNotExists("salesOrders", _vectorIndexType);
+        CreateVectorIndexIfNotExists("products", _vectorIndexType);
+        CreateVectorIndexIfNotExists("customers", _vectorIndexType);
+        CreateVectorIndexIfNotExists("salesOrders", _vectorIndexType);
     }
 
     /// <summary>
@@ -91,8 +89,6 @@ public class MongoDbService
             //Find if vector index exists in vectors collection
             using (IAsyncCursor<BsonDocument> indexCursor = collection.Indexes.List())
             {
-                //var list = indexCursor.ToList();
-                //collection.Indexes.DropOne(vectorIndexName);
                 bool vectorIndexExists = indexCursor.ToList().Any(x => x["name"] == vectorIndexName);
                 if (!vectorIndexExists)
                 {
