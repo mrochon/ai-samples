@@ -1,0 +1,34 @@
+C:\Users\mrochon\AppData\Local\Programs\mongosh> mongosh <connection>
+
+use quickstartDB // Create new database named 'quickstartDB' or switch to it if it already exists
+
+db.createCollection('books') 
+db.books.insertMany([
+    {title: "The Great Gatsby", author: "F. Scott Fitzgerald", pages: 180},
+    {title: "To Kill a Mockingbird", author: "Harper Lee", pages: 324},
+    {title: "1984", author: "George Orwell", pages: 328},
+    {title: "The Catcher in the Rye", author: "J.D. Salinger", pages: 277},
+    {title: "Moby-Dick", author: "Herman Melville", pages: 720},
+    {title: "Pride and Prejudice", author: "Jane Austen", pages: 279},
+    {title: "The Hobbit", author: "J.R.R. Tolkien", pages: 310},
+    {title: "War and Peace", author: "Leo Tolstoy", pages: 1392},
+    {title: "The Odyssey", author: "Homer", pages: 374},
+    {title: "Ulysses", author: "James Joyce", pages: 730}
+  ])
+
+
+db.books.createIndex( { title : -1 }, function(err, result) {
+   console.log(result);
+   callback(result);
+}
+
+
+https://mraifunctions.azurewebsites.net/api/IngestAndVectorize?
+
+db.products.find({ vector : { $size : 0 }}, {name: 1 })
+
+List just names
+db.products.find({}, {name: 1, _id: 0})
+
+Un-vectorized collection items
+db.customers.find({'vector.0': {$exists: false}}, {name: 1, _id: 0})
