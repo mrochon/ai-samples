@@ -122,7 +122,7 @@ public class ChatService
         try
         { 
             ArgumentNullException.ThrowIfNull(sessionId);
-
+            //TODO: do a completion on user's prompt to decide which collections to search
 
             //Get embeddings for user prompt and number of tokens it uses.
             (float[] promptVectors, int promptTokens) = await _openAiService.GetEmbeddingsAsync(sessionId, userPrompt);
