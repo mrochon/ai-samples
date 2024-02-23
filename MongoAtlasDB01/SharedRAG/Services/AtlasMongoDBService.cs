@@ -122,6 +122,57 @@ namespace SharedRAG.Services
         }
 
         // Add Search: https://www.mongodb.com/docs/atlas/atlas-vector-search/vector-search-tutorial/
+        public async Task<string> SearchAsync(string dbName, string collectionName, string query, int limit)
+        {
+            var db = _client.GetDatabase(dbName);
+            var collection = db.GetCollection<BsonDocument>(collectionName);
+            (float[] embeddings, int tokens) = await _ai.GetEmbeddingsAsync(string.Empty, query);
+            var embeddingsArray = new BsonArray(embeddings.Select(e => new BsonDouble(Convert.ToDouble(e))));
+            BsonDocument[] pipeline =
+            [
+                new BsonDocument
+                {
+                    { "$search", new BsonDocument
+                        {
+                            { "index", "vector_index" },
+                            { "path", "embedding" },
+                            { "queryVector", embeddingsArray },
+                            { "limit", limit },
+                            { "numCandidates", 200 }
+                        }
+                    }
+                },
+                new BsonDocument
+                {
+                    { "$project", new BsonDocument
+                        {
+                            { "_id", 1 },
+                            { "description", 1 },
+                            { "score", new BsonDocument
+                                {
+                                   { "$meta", "searchScore" }
+                                }
+                            }
+                        }
+                    }
+                } 
+            ];
+            string resultDocuments = string.Empty;
+            try
+            {
+                // Return results, combine into a single string
+                List<BsonDocument> bsonDocuments = await collection.Aggregate<BsonDocument>(pipeline).ToListAsync();
+                List<string> result = bsonDocuments.ConvertAll(bsonDocument => bsonDocument.ToString());
+                resultDocuments = string.Join(" ", result);
+                _logger.LogInformation("Search result: " + result.ToJson());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception: Search(): {ex.Message}");
+                throw;
+            }
+            return resultDocuments;
+        }       
 
         public async Task AddDocumentWithVectorAsync(string dbName, string collectionName, string json, string propertyPath)
         {
