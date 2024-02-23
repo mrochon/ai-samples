@@ -19,7 +19,7 @@ public static class Settings
     private const string SecretKey = "apikey";
     private const string BingApiKey = "bingKey";
     private const string OrgKey = "org";
-    private const string MongoConnKey = "mongoDbConnectionString";
+    private const string MongoConnKey = "AZURE_MONGODB_CONNECTION";
     private const bool StoreConfigOnFile = true;
 
     // Prompt user for Azure Endpoint URL
@@ -227,26 +227,9 @@ public static class Settings
     {
         get
         {
-            var conn = Environment.GetEnvironmentVariable("AZURE_MONGODB_CONNECTION");
-            if (conn != null) return conn;
-            var configFile = DefaultConfigFile.Replace("settings.", "secrets.");
-            try
-            {
-                if (System.IO.File.Exists(configFile))
-                {
-                    var config = JsonSerializer.Deserialize<Dictionary<string, string>>(System.IO.File.ReadAllText(configFile));
-                    return config[MongoConnKey];
-                } else
-                {
-                    Console.WriteLine("secrets.json not found");
-                    throw new Exception("secrets.json not found");
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                throw;
-            }
+            var conn = Environment.GetEnvironmentVariable(MongoConnKey);
+            if (conn == null) throw new Exception($"{MongoConnKey} environment variable not found");
+            return conn;
         }
     }
 

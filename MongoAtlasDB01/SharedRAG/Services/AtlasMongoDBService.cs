@@ -6,6 +6,8 @@ using MongoDB.Driver;
 using SharedRAG.Models;
 using MongoDB.Driver.Core.Operations;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using System;
+using System.Diagnostics;
 
 namespace SharedRAG.Services
 {
@@ -92,13 +94,34 @@ namespace SharedRAG.Services
             // Return first 10 documents from a collection
 
             var filter = Builders<BsonDocument>.Filter.Exists("embedding", false);
-            foreach (var doc in await collection.Find(filter).Limit(10).ToListAsync())
+            var docs = await collection.Find(filter).ToListAsync();
+            _logger.LogInformation($"Creating embedding for {(docs.Count)} docs");
+            //foreach (var doc in await collection.Find(filter).Limit(10).ToListAsync()) ;
+            var sw = new Stopwatch();
+            sw.Start();
+            var count = 0;
+            foreach (var doc in docs)
             {
-                (float[] embeddings, int tokens) = await _ai.GetEmbeddingsAsync(string.Empty, doc[propertyPath].AsString);
-                doc["embedding"] = BsonValue.Create(embeddings);
-                await collection.ReplaceOneAsync(new BsonDocument("_id", doc["_id"]), doc);
+                try
+                {
+                    (float[] embeddings, int tokens) = await _ai.GetEmbeddingsAsync(string.Empty, doc[propertyPath].AsString);
+                    doc["embedding"] = BsonValue.Create(embeddings);
+                    await collection.ReplaceOneAsync(new BsonDocument("_id", doc["_id"]), doc);
+                    if ((++count % 10) == 0)
+                    {
+                        _logger.LogInformation($"{sw.ElapsedMilliseconds.ToString()}/10 documents");
+                        sw.Reset();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Exception: CreateEmbeddingAsync(): {ex.Message}");
+                    throw;
+                }
             }
         }
+
+        // Add Search: https://www.mongodb.com/docs/atlas/atlas-vector-search/vector-search-tutorial/
 
         public async Task AddDocumentWithVectorAsync(string dbName, string collectionName, string json, string propertyPath)
         {
