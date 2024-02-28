@@ -132,7 +132,7 @@ namespace SharedRAG.Services
             [
                 new BsonDocument
                 {
-                    { "$search", new BsonDocument
+                    { "$vectorSearch", new BsonDocument
                         {
                             { "index", "vector_index" },
                             { "path", "embedding" },
@@ -150,7 +150,7 @@ namespace SharedRAG.Services
                             { "description", 1 },
                             { "score", new BsonDocument
                                 {
-                                   { "$meta", "searchScore" }
+                                   { "$meta", "vectorSearchScore" }
                                 }
                             }
                         }
