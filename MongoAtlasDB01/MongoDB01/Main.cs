@@ -22,9 +22,9 @@ namespace MongoDB01
         {
             Console.WriteLine("Started");
 
-            //await _dbClient.CreateEmbeddingAsync("sample_airbnb", "listingsAndReviews", "description");
+            await _dbClient.CreateEmbeddingAsync("sample_airbnb", "listingsAndReviews", "description");
 
-            await _dbClient.SearchAsync("sample_airbnb", "listingsAndReviews", "two bedrooms", 2);
+            //await _dbClient.SearchAsync("sample_airbnb", "listingsAndReviews", "two bedrooms", 2);
         }
 
         public Task StopAsync(CancellationToken cancellationToken)

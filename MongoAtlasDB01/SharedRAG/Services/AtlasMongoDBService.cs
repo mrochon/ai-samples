@@ -110,7 +110,7 @@ namespace SharedRAG.Services
                     if ((++count % 10) == 0)
                     {
                         _logger.LogInformation($"{sw.ElapsedMilliseconds.ToString()}/10 documents");
-                        sw.Reset();
+                        sw.Restart();
                     }
                 }
                 catch (Exception ex)
