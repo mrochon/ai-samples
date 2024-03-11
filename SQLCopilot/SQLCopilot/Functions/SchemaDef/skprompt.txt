@@ -1,0 +1,20 @@
+﻿Given the following SQL database schema:
+
+create table orders (
+	[Id] [int] not null,
+	[CustomerId] [int] not null,
+	[OrderDate] [datetime] not null,
+	[Total] [money] not null
+)
+
+create table orderDetails (
+	[Id] [int] not null,
+	[LineNo] [int] not null,
+	[ProductID] [int] not null,
+	[Quantity] [int] not null,
+	[Price] [money] not null
+)
+
+
+Create an SQL statement to execute the provided {{$query}}. Do not return all table columns. If the {{$query}} does not include which detail to return, respond with 'column details needed'.
+

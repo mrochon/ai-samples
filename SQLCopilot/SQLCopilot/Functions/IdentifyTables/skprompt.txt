@@ -1,0 +1,13 @@
+﻿These are availoable database tables that one may query:
+
+   Customers
+   Orders
+   OrderDetails
+   Transactions
+   Products
+
+Which table or tables is this {{$query}} using? Respond with a comma delimited list of tables. If none much, respond with Unknown. If not sure, respond with question that will help clarify the answer. 
+
+{{$input}}
+
+Tables:

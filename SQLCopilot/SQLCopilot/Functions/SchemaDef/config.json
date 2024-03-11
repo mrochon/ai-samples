@@ -1,0 +1,21 @@
+﻿{
+  "schema": 1,
+  "description": "Defines database schema",
+  "execution_settings": {
+    "default": {
+      "max_tokens": 100,
+      "temperature": 0.1,
+      "top_p": 1.0,
+      "presence_penalty": 0.0,
+      "frequency_penalty": 0.0
+    }
+  },
+  "input_variables": [
+    {
+      "name": "query",
+      "description": "User-provided free-flow query definition",
+      "default": "",
+      "is_required": true
+    }
+  ]
+}
