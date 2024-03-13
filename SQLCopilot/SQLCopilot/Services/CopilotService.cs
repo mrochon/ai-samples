@@ -88,7 +88,7 @@ namespace SQLCopilot.Services
 
 #pragma warning disable SKEXP0052
             // TextMemoryPlugin provides the "recall" function
-            _kernel.Plugins.Add(_kernel.ImportPluginFromObject(new TextMemoryPlugin(_memory)));
+            _kernel.ImportPluginFromObject(new TextMemoryPlugin(_memory));
             const string skPrompt = @"
 Generate SQL query based on user input or ask for more details in case you need more information to generate the query. The generated query must specify names of columns to return rather than using the ""*"" (asterisk) operator.
 If you don't have enough information for SQL query generation - respond with your question starting with ""ChatBot: "" prefix. For example: ""ChatBot: What details do you need about your customer?"".
@@ -161,7 +161,7 @@ ChatBot: ";
                     answer = await chatFunction.InvokeAsync(_kernel, arguments);
                 }
                 Console.WriteLine(answer);
-            } while (true);
+            };
 
         }
 
