@@ -8,6 +8,9 @@ using Microsoft.Extensions.Options;
 using Models;
 using System;
 using Microsoft.SemanticKernel.Plugins.Memory;
+using System.Data;
+using System.IO.Pipes;
+using System.Text;
 
 namespace SQLCopilot.Services
 {
@@ -87,24 +90,79 @@ namespace SQLCopilot.Services
             // TextMemoryPlugin provides the "recall" function
             _kernel.ImportPluginFromObject(new TextMemoryPlugin(_memory));
             const string skPrompt = @"
-Use {{recall $query}} and SQL syntax definitions to create an SQL command to retrieve data 
-specified by the {{$userInput}}. Include any search conditions specified in the {{$userInput}}.
-When returning an SQL command, prefix the response with SQL: and a space.
-When returning a chat response, prefix the response with ChatBot: and a space.
+Generate SQL query based on user input or ask for more details in case you need more information to generate the query. The generated query must specify names of columns to return rather than using the ""*"" (asterisk) operator.
+If you don't have enough information for SQL query generation - respond with your question starting with ""ChatBot: "" prefix. For example: ""ChatBot: What details do you need about your customer?"".
+If you have enough information for SQL query generation - generate a query and return it starting with ""SQL: "" prefix. For example: ""SQL: SELECT FirstName, LastName FROM Contacts"". 
+If the user input does not give you enough information about which columns to use in the query, respond with your question starting with ""ChatBot:"". 
+
+Chat: {{$history}}
+User input: {{$userInput}}
+Schema: {{recall $userInput}}
+
+###
+# The following examples are for the SQLCopilot plugin
+
+userInput: Show customers in New York
+chatbot: ChatBot: What specific data do you want about these customers?
+
+userInput: List orders worth more than $100
+chatbot: ChatBot: what data do you need about those orders?
+
+userInput: List names of customers in Boston
+chatbot: SQL: SELECT name FROM customers WHERE city = 'Boston'
+
+userInput : List order ids for customer 123?
+chatbot: SQL: SELECT id FROM orders WHERE customerId = 123
+
+userInput: Who ordered product XYZ?
+chatbot: ChatBot: what data do you need about that customer?
 
 User: {{$userInput}}
 ChatBot: ";
+
+            string[] queries = new string[]
+            {
+                "Show customers in Boston",
+                "List orders worth more than $100",
+                "List names of customers in Boston",
+                "List orders ids for customer 123",
+                "Who ordered product XYZ?",
+                "I need order data"
+            };
+            StringBuilder history = new StringBuilder();
+
             var chatFunction = _kernel.CreateFunctionFromPrompt(skPrompt, new OpenAIPromptExecutionSettings { MaxTokens = 200, Temperature = 0.8 });
 #pragma warning disable SKEXP0052
             var arguments = new KernelArguments();
             arguments[TextMemoryPlugin.CollectionParam] = MemoryCollectionName;
             arguments[TextMemoryPlugin.LimitParam] = "2";
-            arguments[TextMemoryPlugin.RelevanceParam] = "0.8";
-            arguments["query"] = "List customers in Boston";
+            arguments[TextMemoryPlugin.RelevanceParam] = "0.9";
+            foreach(var userInput in queries)
+            {
+                //Console.Write('>');
+                //var userInput = Console.ReadLine();
+                //if (String.IsNullOrEmpty(userInput))
+                //{
+                //    break;
+                //}
+                Console.WriteLine($">{userInput}");
+                arguments["userInput"] = userInput;
+                var answer = await chatFunction.InvokeAsync(_kernel, arguments);
+                history.Clear();
+                while(answer.ToString().StartsWith("ChatBot"))
+                {
+                    Console.WriteLine(answer);
+                    Console.Write(">>");
+                    var inp = Console.ReadLine();
+                    var result = $"\nUser: {userInput}\nChatBot: {answer}\n";
+                    history.Append(result);
+                    arguments["history"] = history;
+                    arguments["userInput"] = inp;
+                    answer = await chatFunction.InvokeAsync(_kernel, arguments);
+                }
+                Console.WriteLine(answer);
+            } while (true);
 
-            // Process the user message and get an answer
-            var answer = await chatFunction.InvokeAsync(_kernel, arguments);
-            Console.WriteLine(answer);
         }
 
         private void ListPlugins()
