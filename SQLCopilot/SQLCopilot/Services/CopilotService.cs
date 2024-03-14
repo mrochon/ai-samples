@@ -162,7 +162,6 @@ ChatBot: ";
                 }
                 Console.WriteLine(answer);
             };
-
         }
 
         private void ListPlugins()

@@ -20,9 +20,11 @@ builder.Configuration
     .AddJsonFile($"appSettings.{env.EnvironmentName}.json", true, true)
     .AddUserSecrets<Program>();
 
+#pragma warning disable SKEXP0004
 builder.Services.AddOptions()
     .Configure<OpenAIOptions>(builder.Configuration.GetSection("OpenAI"))
     .AddLogging(builder => builder.AddSimpleConsole())
+    .AddSingleton<IPromptFilter, PromptFilter>()
     .AddHostedService<CopilotService>();
 
 builder.Build().Run();
