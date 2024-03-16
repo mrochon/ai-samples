@@ -24,7 +24,6 @@ builder.Configuration
 builder.Services.AddOptions()
     .Configure<OpenAIOptions>(builder.Configuration.GetSection("OpenAI"))
     .AddLogging(builder => builder.AddSimpleConsole())
-    .AddSingleton<IPromptFilter, PromptFilter>()
     .AddHostedService<CopilotService>();
 
 builder.Build().Run();

@@ -8,13 +8,11 @@ using System.Threading.Tasks;
 
 namespace SQLCopilot.Services
 {
-#pragma warning disable SKEXP0004
+#pragma warning disable SKEXP0001
     internal sealed class PromptFilter : IPromptFilter
     {
-        private readonly ILogger<PromptFilter> _logger;
-        public PromptFilter(ILogger<PromptFilter> logger)
+        public PromptFilter()
         {
-            this._logger = logger;
         }
 
         /// <summary>
@@ -22,8 +20,9 @@ namespace SQLCopilot.Services
         /// </summary>
         public void OnPromptRendered(PromptRenderedContext context)
         {
-            context.RenderedPrompt += " NO SEXISM, RACISM OR OTHER BIAS/BIGOTRY";
-            this._logger.LogInformation($"PromptRendered: {context.RenderedPrompt}");
+            Console.WriteLine("PromptRendered");
+            Console.WriteLine(context.RenderedPrompt);
+            //context.RenderedPrompt += " NO SEXISM, RACISM OR OTHER BIAS/BIGOTRY";
         }
 
         /// <summary>
@@ -31,14 +30,15 @@ namespace SQLCopilot.Services
         /// </summary>
         public void OnPromptRendering(PromptRenderingContext context)
         {
+            Console.WriteLine("PromptRendering");
             foreach(var arg in context.Arguments)
             {
-                this._logger.LogInformation($"Argument: {arg.Key} = {arg.Value}");
+                Console.WriteLine($"Argument: {arg.Key} = {arg.Value}");
             }
-            if (context.Arguments.ContainsName("card_number"))
-            {
-                context.Arguments["card_number"] = "**** **** **** ****";
-            }
+            //if (context.Arguments.ContainsName("card_number"))
+            //{
+            //    context.Arguments["card_number"] = "**** **** **** ****";
+            //}
         }
     }
 }

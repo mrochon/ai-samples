@@ -11,6 +11,7 @@ using Microsoft.SemanticKernel.Plugins.Memory;
 using System.Data;
 using System.IO.Pipes;
 using System.Text;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace SQLCopilot.Services
 {
@@ -18,7 +19,7 @@ namespace SQLCopilot.Services
     {
         private readonly ILogger<CopilotService> _logger;
         private readonly Kernel _kernel;
-#pragma warning disable SKEXP0003
+#pragma warning disable SKEXP0001, SKEXP0010, SKEXP0050
         private readonly ISemanticTextMemory _memory;
         public CopilotService(
             ILogger<CopilotService> logger,
@@ -31,12 +32,15 @@ namespace SQLCopilot.Services
             ArgumentNullException.ThrowIfNull(options.Value.Key, nameof(options.Value.Key));
             ArgumentNullException.ThrowIfNull(options.Value.ChatDeployment, nameof(options.Value.ChatDeployment));
             ArgumentNullException.ThrowIfNull(options.Value.EmbeddingDeployment, nameof(options.Value.EmbeddingDeployment));
-            _kernel = Kernel.CreateBuilder()
+            var builder = Kernel.CreateBuilder()
                 .AddAzureOpenAIChatCompletion(
                      options.Value.ChatDeployment,   // deployment name
                      options.Value.Endpoint!, // Azure OpenAI Endpoint
-                     options.Value.Key!)      // Azure OpenAI Key
-                .Build();
+                     options.Value.Key!);      // Azure OpenAI Key
+            builder.Services.AddSingleton<IPromptFilter, PromptFilter>();
+            _kernel = builder.Build();
+            //// Add filter without DI
+            //_kernel.PromptFilters.Add(filter);
             var memoryBuilder = new MemoryBuilder();
 #pragma warning disable SKEXP0052, SKEXP0011
             memoryBuilder.WithAzureOpenAITextEmbeddingGeneration(
@@ -81,10 +85,13 @@ namespace SQLCopilot.Services
 
         private async Task GenerateUsingSchemaAsync()
         {
-            const string MemoryCollectionName = "schema";
-
-            await _memory.SaveInformationAsync(MemoryCollectionName, id: "orders", text: "orders(id, amount, date, customerId)");
-            await _memory.SaveInformationAsync(MemoryCollectionName, id: "customers", text: "customers(id, name, zip, city)");
+            const string MemoryCollectionName = "tables";
+            await _memory.SaveInformationAsync(MemoryCollectionName, id: "orders", text:
+            @"Orders table contains information about orders, who placed them, when they were placed, and the total amount of the order. Columns in order table: id, customerId, date, total");
+            await _memory.SaveInformationAsync(MemoryCollectionName, id: "customer", text:
+            @"Table: Customers table contains information about customers, their name and address. Columns in customers table: id, name, address");
+            await _memory.SaveInformationAsync(MemoryCollectionName, id: "orderLine", text:
+            @"Table: OrderLine table contains information about individual items in an order. Columns in orderLine table: lineNo, itemId, price, quantity, orderId");
 
 #pragma warning disable SKEXP0052
             // TextMemoryPlugin provides the "recall" function
@@ -97,13 +104,15 @@ If the user input does not give you enough information about which columns to us
 
 Chat: {{$history}}
 User input: {{$userInput}}
-Schema: {{recall $userInput}}
+Schema: {{Recall $userInput}}
 
 ###
 # The following examples are for the SQLCopilot plugin
 
 userInput: Show customers in New York
 chatbot: ChatBot: What specific data do you want about these customers?
+userInput: Names
+chatbot: SQL: SELECT name FROM customers WHERE city = 'New York'
 
 userInput: List orders worth more than $100
 chatbot: ChatBot: what data do you need about those orders?
@@ -123,20 +132,19 @@ ChatBot: ";
             string[] queries = new string[]
             {
                 "Show customers in Boston",
-                "List orders worth more than $100",
-                "List names of customers in Boston",
-                "List orders ids for customer 123",
-                "Who ordered product XYZ?",
-                "I need order data"
+                //"List orders worth more than $100",
+                //"List names of customers in Boston",
+                //"List orders ids for customer 123",
+                //"Who ordered product XYZ?",
+                //"I need order data"
             };
             StringBuilder history = new StringBuilder();
 
             var chatFunction = _kernel.CreateFunctionFromPrompt(skPrompt, new OpenAIPromptExecutionSettings { MaxTokens = 200, Temperature = 0.8 });
-#pragma warning disable SKEXP0052
             var arguments = new KernelArguments();
             arguments[TextMemoryPlugin.CollectionParam] = MemoryCollectionName;
             arguments[TextMemoryPlugin.LimitParam] = "2";
-            arguments[TextMemoryPlugin.RelevanceParam] = "0.9";
+            arguments[TextMemoryPlugin.RelevanceParam] = "0.75";
             foreach(var userInput in queries)
             {
                 //Console.Write('>');
@@ -156,7 +164,7 @@ ChatBot: ";
                     var inp = Console.ReadLine();
                     var result = $"\nUser: {userInput}\nChatBot: {answer}\n";
                     history.Append(result);
-                    arguments["history"] = history;
+                    arguments["history"] = history.ToString();
                     arguments["userInput"] = inp;
                     answer = await chatFunction.InvokeAsync(_kernel, arguments);
                 }
