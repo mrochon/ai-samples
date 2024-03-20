@@ -57,27 +57,28 @@ namespace SharedRAG.Services
             await _client.IndexDocumentsAsync(IndexDocumentsBatch.Upload(documents));
         }
 
-        public async Task<IEnumerable<T>> VectorSearchAsync<T>(string indexName, ReadOnlyMemory<float> vectorizedResult) where T : class
+        public async Task<IEnumerable<T>> VectorSearchAsync<T>(string indexName, ReadOnlyMemory<float> vectorizedValue) where T : class
         {
+            _logger.LogTrace($"Vector Search using: {indexName}");
             List<T> docs = new();
             SearchResults<T> response = await _client.SearchAsync<T>(
                 new SearchOptions
                 {
                     VectorSearch = new()
                     {
-                        Queries = { new VectorizedQuery(vectorizedResult) { KNearestNeighborsCount = 3, Fields = { indexName } } }
+                        Queries = { new VectorizedQuery(vectorizedValue) { KNearestNeighborsCount = 3, Fields = { indexName } } }
                     }
                 });
 
             int count = 0;
-            Console.WriteLine($"Single Vector Search Results:");
+            _logger.LogTrace("Processing search results");
             await foreach (SearchResult<T> result in response.GetResultsAsync())
             {
                 count++;
                 T doc = result.Document;
                 docs.Add(doc);
             }
-            Console.WriteLine($"Total number of search results:{count}");
+            _logger.LogTrace($"Total number of search results:{count}");
             return docs;
         }
     }

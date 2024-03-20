@@ -38,11 +38,11 @@ namespace MongoDB01
         }
         public async Task StartAsync(CancellationToken cancellationToken)
         {
-            Console.WriteLine("MainAISearch Started");
+            _logger.LogTrace("MainAISearch Started");
             // await _searchService.CreateIndexAsync(DefineIndex());
             //await _searchService.UploadDocumentsAsync(await GetDocumentsAsync());
             await SearchPropertiesAsync("Embedding", "two bedrooms with view of the sea");
-            Console.WriteLine("done");
+            _logger.LogTrace("done");
             await StopAsync(cancellationToken);
         }
 
@@ -86,7 +86,7 @@ namespace MongoDB01
         {
             var props = new List<PropertyIndexModel>();
             var blobs = await _blob.DownloadBlobsAsync();
-            _logger.LogInformation("Downloadin blobs");
+            _logger.LogTrace("Downloadin blobs");
             foreach (var blob in blobs)
             {
                 var doc = JsonObject.Parse(blob);
@@ -98,19 +98,20 @@ namespace MongoDB01
                 };
                 props.Add(prop);
             }
-            _logger.LogInformation($"Downloaded: {props.Count} blobs");
-            _logger.LogInformation("Getting embeddings");
+            _logger.LogTrace($"Downloaded: {props.Count} blobs");
+            _logger.LogTrace("Getting embeddings");
             foreach (var prop in props)
             {
                 var (vector, tokens) = await _ai.GetEmbeddingsAsync(String.Empty, prop.Description);
                 prop.Embedding = vector;
             }
-            _logger.LogInformation("Got embeddings");
+            _logger.LogTrace("Got embeddings");
             return props;
         }
 
         private async Task SearchPropertiesAsync(string indexName, string filter)
         {
+            _logger.LogTrace("Searching properties");
             var (vector, tokens) = await _ai.GetEmbeddingsAsync(string.Empty, filter);
             ReadOnlyMemory<float> vectorizedResult = new ReadOnlyMemory<float>(vector);
             var props = await _searchService.VectorSearchAsync<PropertyIndexModel>(indexName, vectorizedResult);

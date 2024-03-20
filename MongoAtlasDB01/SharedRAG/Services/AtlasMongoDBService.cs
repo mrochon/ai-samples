@@ -95,7 +95,7 @@ namespace SharedRAG.Services
 
             var filter = Builders<BsonDocument>.Filter.Exists("embedding", false);
             var docs = await collection.Find(filter).ToListAsync();
-            _logger.LogInformation($"Creating embedding for {(docs.Count)} docs");
+            _logger.LogTrace($"Creating embedding for {(docs.Count)} docs");
             //foreach (var doc in await collection.Find(filter).Limit(10).ToListAsync()) ;
             var sw = new Stopwatch();
             sw.Start();
@@ -109,7 +109,7 @@ namespace SharedRAG.Services
                     await collection.ReplaceOneAsync(new BsonDocument("_id", doc["_id"]), doc);
                     if ((++count % 10) == 0)
                     {
-                        _logger.LogInformation($"{sw.ElapsedMilliseconds.ToString()}/10 documents");
+                        _logger.LogTrace($"{sw.ElapsedMilliseconds.ToString()}/10 documents");
                         sw.Restart();
                     }
                 }
@@ -164,7 +164,7 @@ namespace SharedRAG.Services
                 List<BsonDocument> bsonDocuments = await collection.Aggregate<BsonDocument>(pipeline).ToListAsync();
                 List<string> result = bsonDocuments.ConvertAll(bsonDocument => bsonDocument.ToString());
                 resultDocuments = string.Join(" ", result);
-                _logger.LogInformation("Search result: " + result.ToJson());
+                _logger.LogTrace("Search result: " + result.ToJson());
             }
             catch (Exception ex)
             {
