@@ -21,9 +21,13 @@ builder.Configuration
 builder.Services.AddOptions()
     .Configure<MongoDBOptions>(builder.Configuration.GetSection("MongoDB"))
     .Configure<OpenAIOptions>(builder.Configuration.GetSection("OpenAI"))
+    .Configure<BlobOptions>(builder.Configuration.GetSection("BlobStorage"))
+    .Configure<AzureAISearchOptions>(builder.Configuration.GetSection("AISearch"))
     .AddLogging(builder => builder.AddSimpleConsole())
     .AddScoped<OpenAIService>()
     .AddScoped<AtlasMongoDBService>()
-    .AddHostedService<Main>();
+    .AddScoped<BlobService>()
+    .AddScoped<AzureAISearchService>()
+    .AddHostedService<MainAISearch>();
 
 builder.Build().Run();

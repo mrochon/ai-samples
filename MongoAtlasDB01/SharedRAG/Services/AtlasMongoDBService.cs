@@ -37,7 +37,7 @@ namespace SharedRAG.Services
             get { return _client.ListDatabaseNames().ToList(); }
         }
 
-        public async Task CreateEmbeddingIndexAsync(string dbName, string collectionName, string indexName)
+        public void CreateEmbeddingIndex(string dbName, string collectionName, string indexName)
         {
             _logger.LogTrace("CreateEmbeddingIndexAsync");
             var db = _client.GetDatabase(dbName);
@@ -192,6 +192,16 @@ namespace SharedRAG.Services
                 throw;
             }
         }
+
+        public IEnumerable<BsonDocument> Get(string dbName, string collectionName)
+        {
+            _logger.LogTrace("DownloadAsync");
+            var collection = _client.GetDatabase(dbName).GetCollection<BsonDocument>(collectionName);
+
+            var filter = Builders<BsonDocument>.Filter.Empty;
+            return collection.Find(filter).Limit(10).ToList();
+        }
+
         //public async Task<Customer> UpsertCustomerAsync(Customer customer)
         //{
         //    try
