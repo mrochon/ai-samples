@@ -57,10 +57,10 @@ namespace SKApps
 
             // Query with index name
             // The final prompt will look like this "Emily and David are...(more text based on data). Who is David?".
-            //var result1 = await _kernel.InvokePromptAsync(
-            //    "{{search 'Apartment with seaview' collection='properties'} Apartment with view of the sea?");
+            var result1 = await _kernel.InvokePromptAsync(
+                "{{search 'Apartments with seaview' collection='properties'} Apartment with view of the sea?");
 
-            //Console.WriteLine(result1);
+            Console.WriteLine(result1);
 
             // Query with index name and search fields.
             // Search fields are optional. Since one index may contain multiple searchable fields,
@@ -69,11 +69,10 @@ namespace SKApps
 
             // The final prompt will look like this "Elara is...(more text based on data). Who is Elara?".
             var result2 = await _kernel.InvokePromptAsync(
-                "{{search 'Seaview apartments, small' collection='properties' searchFields=$searchFields}} Who is Elara?",
+                "{{search 'Seaview apartments, small' collection='properties' searchFields=$searchFields}} How big are apartments with seaview?",
                 arguments);
 
             Console.WriteLine(result2);
-
 
             _logger.LogTrace($"{this.GetType().Name} Done");
             await StopAsync(cancellationToken);

@@ -14,6 +14,7 @@ using Azure.Core;
 using Microsoft.Extensions.Options;
 using Amazon.Runtime.Internal.Util;
 using Microsoft.Extensions.Logging;
+using MongoDB.Driver.Linq;
 
 namespace SKApps.Services
 {
@@ -58,17 +59,21 @@ namespace SKApps.Services
             VectorizedQuery vectorQuery = new(vector);
             fields.ForEach(field => vectorQuery.Fields.Add(field));
             SearchOptions searchOptions = new() { VectorSearch = new() { Queries = { vectorQuery } } };
-            Response<SearchResults<IndexSchema>> response = await _client.SearchAsync<IndexSchema>(searchOptions, cancellationToken);
-            List<IndexSchema> results = new();
-            await foreach (SearchResult<IndexSchema> result in response.Value.GetResultsAsync())
+            Response<SearchResults<PropertyIndexModel>> response = await _client.SearchAsync<PropertyIndexModel>(searchOptions, cancellationToken);
+            StringBuilder results = new();
+            var docs = response.Value.GetResultsAsync().ToBlockingEnumerable().OrderByDescending(d => d.Score);
+            foreach (var doc in docs)
             {
-                results.Add(result.Document);
+                results.Append(doc.Document.Description);
+                results.AppendLine();
+                results.Append("====");
+                results.AppendLine();
             }
-            // Return text from first result.
             // In real applications, the logic can check document score, sort and return top N results
             // or aggregate all results in one text.
             // The logic and decision which text data to return should be based on business scenario. 
-            return results.FirstOrDefault()?.Chunk;
+            _logger.LogTrace($"Vector Search result length: {results.Length}");
+            return results.ToString();
         }
 
         public sealed class IndexSchema
@@ -87,6 +92,14 @@ namespace SKApps.Services
 
             [JsonPropertyName("vector")]
             public ReadOnlyMemory<float> Vector { get; set; }
+        }
+
+        public class PropertyIndexModel
+        {
+            public string? Id { get; set; }
+            public string? Name { get; set; }
+            public string? Description { get; set; }
+            //public ReadOnlyMemory<float> Embedding { get; set; }
         }
     }
 }
