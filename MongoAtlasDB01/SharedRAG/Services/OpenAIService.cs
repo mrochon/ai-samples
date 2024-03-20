@@ -51,6 +51,7 @@ namespace SharedRAG.Services
                 Embeddings embeddings = response.Value;
                 responseTokens = embeddings.Usage.TotalTokens;
                 embedding = embeddings.Data[0].Embedding.ToArray();
+                _logger.LogTrace($"Got embeddings: used {responseTokens} for: {input.Substring(0, 20)}...");
                 return (embedding, responseTokens);
             }
             catch (Exception ex)
