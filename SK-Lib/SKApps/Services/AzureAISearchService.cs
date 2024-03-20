@@ -15,6 +15,7 @@ using Microsoft.Extensions.Options;
 using Amazon.Runtime.Internal.Util;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver.Linq;
+using MongoDB.Driver;
 
 namespace SKApps.Services
 {
@@ -32,13 +33,14 @@ namespace SKApps.Services
     {
         ILogger<AzureAISearchService> _logger;
         private readonly List<string> _defaultVectorFields = new() { "vector" };
-        private readonly SearchClient _client;
+        IOptions<AzureAISearchOptions> _options;
 
         public AzureAISearchService(
             ILogger<AzureAISearchService> logger,
             IOptions<AzureAISearchOptions> options)
         {
             _logger = logger;
+            _options = options;
             var aiOptions = new OpenAIClientOptions()
             {
                 Retry =
@@ -48,18 +50,26 @@ namespace SKApps.Services
                     Mode = RetryMode.Exponential
                 }
             };
-            _client = new(new Uri(options.Value.Endpoint), options.Value.IndexName, new AzureKeyCredential(options.Value.Key));
+            Count = 3;
         }
+
+        public int Count { get; set; }
 
         public async Task<string?> SearchAsync(string collectionName, ReadOnlyMemory<float> vector, List<string>? searchFields = null, CancellationToken cancellationToken = default)
         {
             _logger.LogTrace($"Vector Search using: {collectionName}");
+            SearchClient client = new(new Uri(_options.Value.Endpoint), collectionName, new AzureKeyCredential(_options.Value.Key));
 
-            List<string> fields = searchFields is { Count: > 0 } ? searchFields : this._defaultVectorFields;
-            VectorizedQuery vectorQuery = new(vector);
-            fields.ForEach(field => vectorQuery.Fields.Add(field));
-            SearchOptions searchOptions = new() { VectorSearch = new() { Queries = { vectorQuery } } };
-            Response<SearchResults<PropertyIndexModel>> response = await _client.SearchAsync<PropertyIndexModel>(searchOptions, cancellationToken);
+            var searchOptions = new SearchOptions
+            {
+                VectorSearch = new()
+                {
+                    Queries = { new VectorizedQuery(vector) { KNearestNeighborsCount = Count } }
+                }
+            };
+            searchFields ??= _defaultVectorFields;
+            searchFields.ForEach(field => searchOptions.VectorSearch.Queries.First().Fields.Add(field));
+            Response<SearchResults<PropertyIndexModel>> response = await client.SearchAsync<PropertyIndexModel>(searchOptions, cancellationToken);
             StringBuilder results = new();
             var docs = response.Value.GetResultsAsync().ToBlockingEnumerable().OrderByDescending(d => d.Score);
             foreach (var doc in docs)

@@ -11,6 +11,5 @@ namespace SKApps.Models
         public string? Endpoint { get; set; }
         public string? Key { get; set; }
         public string? AdminKey { get; set; }
-        public string? IndexName { get; set; }
     }
 }
