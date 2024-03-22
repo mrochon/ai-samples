@@ -62,6 +62,7 @@ namespace SKApps.Services
 
             var searchOptions = new SearchOptions
             {
+
                 VectorSearch = new()
                 {
                     Queries = { new VectorizedQuery(vector) { KNearestNeighborsCount = Count } }

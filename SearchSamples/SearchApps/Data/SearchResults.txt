@@ -1,0 +1,198 @@
+﻿Console App starting
+Semantic Hybrid Search Results:
+
+Query Answer:
+Score            : 0.93505859375
+Answer Highlights: <em>Secret Point Hotel. Boutique.</em> This classic hotel is ideally located on the main commercial artery of the city in the heart of New York. A few minutes away is Time's Square and the historic centre of the city, as well as other places of interest that make New York one of America's most attractive and cosmopolitan cities..
+Answer Text      : Secret Point Hotel. Boutique. This classic hotel is ideally located on the main commercial artery of the city in the heart of New York. A few minutes away is Time's Square and the historic centre of the city, as well as other places of interest that make New York one of America's most attractive and cosmopolitan cities..
+1: Secret Point Hotel
+Score            : 0.03333333507180214
+Caption Highlights: Secret Point Hotel. Boutique. This classic hotel is ideally located on the main commercial artery of the city in the heart of New York. A few minutes away is Time's Square and the historic centre of the city, as well as other places of interest that make<em> New York</em> one of America's most attractive and cosmopolitan cities..
+27: Super Deluxe Inn & Suites
+Score            : 0.009708737954497337
+Caption Highlights: Super Deluxe Inn & Suites. Suite. Complimentary Airport Shuttle & WiFi. Book Now and save - Spacious All<em> Suite Hotel,</em> Indoor/Outdoor Pool, Fitness Center, Florida Green certified, Starbucks Coffee, HDTV.
+31: Athens Residence Hotel
+Score            : 0.012345679104328156
+Caption Highlights: Athens Residence Hotel. Extended-Stay. All of the suites feature full-sized kitchens stocked with cookware, separate living and sleeping areas and sofa beds. Some of the larger rooms have fireplaces. Experience real country hospitality in<em> the heart</em> of bustling<em> Nashville. The</em> most vibrant music scene in the world is just outside your front door..
+15: Peaceful Market Hotel
+Score            : 0.0265975221991539
+Caption Text      : Peaceful Market Hotel. Budget. Book now and Save up to 30%. Central location. Steps from Empire State Building & Times Square, in Chelsea neighborhood. Brand new rooms. Impeccable service..
+11: Regal Orb Residence Inn
+Score            : 0.010101010091602802
+Caption Text      : Regal Orb Residence Inn. Extended-Stay. Your home away from home. Brand new fully equipped premium rooms, fast WiFi, full kitchen, washer & dryer, fitness center. Inner courtyard includes water features and outdoor seating. All units include fireplaces and small outdoor balconies. Pets accepted..
+33: Mottelers Thunderbird Motel
+Score            : 0.011363636702299118
+Caption Highlights: <em>Mottelers Thunderbird Motel.</em> Budget. Book Now & Save. Clean, Comfortable rooms at the lowest price. Enjoy complimentary coffee and tea in common areas..
+34: Cap'n Jack's Waterfront Inn
+Score            : 0.009615384973585606
+Caption Highlights: Cap'n Jack's Waterfront Inn. Budget.<em> Every stay</em> starts with<em> a</em> warm cookie. Amenities like<em> the</em> Counting Sheep sleep experience, our Wake-up glorious breakfast buffet and spacious workout facilities await..
+25: Scottish Inn
+Score            : 0.010869565419852734
+Caption Highlights: Scottish Inn. Suite. Newly Redesigned Rooms & airport shuttle. Minutes from the airport, enjoy lakeside amenities,<em> a</em> resort-style pool & stylish new guestrooms with Internet TVs..
+49: Old Carrabelle Hotel
+Score            : 0.01123595517128706
+Caption Highlights: Old Carrabelle Hotel. Suite. Spacious<em> rooms,</em> glamorous<em> suites and</em> residences, rooftop pool, walking access to shopping, dining, entertainment and the<em> city</em> center. Each<em> room</em> comes equipped with<em> a</em> microwave,<em> a</em> coffee maker<em> and a</em> minifridge. In-room entertainment includes complimentary W-Fi and flat-screen TVs. .
+32: Goldmoor Inn
+Score            : 0.012658228166401386
+Caption Highlights: <em>Goldmoor Inn. Suite. AAA</em> Four Diamond Resort. Nestled on six beautifully landscaped acres, located 2 blocks from the park. Unwind at the spa and indulge in art tours on site..
+3: Triple Landscape Hotel
+Score            : 0.013333333656191826
+Caption Text      : Triple Landscape Hotel. Suite. The Triple L Hotel stands out for its gastronomic excellence under the management of William Dough, who advises on and oversees all of the Hotel's restaurant services..
+14: Twin Vertex Hotel
+Score            : 0.014925372786819935
+Caption Highlights: Twin Vertex Hotel. Luxury. New experience in the Making. Be<em> the</em> first to experience<em> the</em> luxury of the Twin Vertex. Reserve one of our newly-renovated guest rooms today..
+21: Nova Hotel
+Score            : 0.009999999776482582
+Caption Highlights: Nova Hotel. Suite. 1 Mile from the airport. Free WiFi, Outdoor Pool, Complimentary Airport Shuttle, 6 miles from Lake Lanier & 10 miles from downtown. Our business center includes printers, a copy machine, fax, and<em> a</em> work area..
+5: Scarlet Harbor Hotel
+Score            : 0.014084506779909134
+Caption Highlights: <em>Scarlet Harbor</em> Hotel. Boutique. On entering this charming hotel in<em> Scarlet Harbor,</em> you will immediately sense its special intimate atmosphere that makes you feel like being in your own home. Each detail has been passionately chosen and each room deserves a visit. The style mixes valuable antiques and original artworks with an unexpected eclectic contemporary twist. The entire hotel recalls times past where young aristocrats lived while discovering the beauty and the artistic mysteries of the area..
+36: Pelham Hotel
+Score            : 0.01149425283074379
+Caption Highlights: Pelham Hotel. Luxury. Stunning Downtown<em> Hotel</em> with indoor Pool. Ideally located close to theatres, museums and the convention center. Indoor Pool and Sauna and fitness centre. Popular Bar & Restaurant.
+50: Summer Wind Resort
+Score            : 0.01315789483487606
+Caption Highlights: Summer Wind Resort. Suite. The hotel rooms and suites offer the perfect blend of beauty and elegance. Our rooms will elevate your stay, whether you're traveling for business, celebrating<em> a</em> honeymoon, or just looking for<em> a</em> remarkable getaway. With views of the valley or the iconic fountains right from your suite, your stay will be nothing short of unforgettable..
+41: Ocean Air Motel
+Score            : 0.013513513840734959
+Caption Highlights: Ocean Air Motel. Suite. Oceanfront<em> hotel</em> overlooking the beach features rooms with<em> a</em> private balcony and 2 indoor and outdoor pools. Inspired by the natural beauty of the island, each room includes an original painting of local scenes by the owner. Rooms include<em> a</em> mini fridge, Keurig coffee maker, and flatscreen TV. Various shops and art entertainment are on the boardwalk, just steps away..
+47: South Court Inn
+Score            : 0.012195121496915817
+Caption Highlights: South Court Inn. Extended-Stay. Situated conveniently at the north end of the village, the<em> inn</em> is just a short walk from the lake, offering reasonable rates and all the comforts home inlcuding living room suites and functional kitchens. Pets are welcome..
+6: King's Palace Hotel
+Score            : 0.012820512987673283
+Caption Highlights: King's Palace Hotel. Suite. Newest kid on the<em> downtown</em> block. Steps away from the most popular destinations<em> in downtown,</em> enjoy free WiFi, an indoor rooftop pool & fitness center, 24 Grab'n'Go & drinks at the bar.
+18: Oceanside Resort
+Score            : 0.011111111380159855
+Caption Text      : Oceanside Resort. Luxury. New Luxury Hotel. Be the first to stay. Bay views from every room, location near the pier, rooftop pool, waterfront dining & more..
+24: La Vista Hotel
+Score            : 0.012048192322254181
+Caption Text      : La Vista Hotel. Suite. Chic hotel near the city. High-rise hotel in downtown, within walking distance to theaters, art galleries, restaurants and shops. Visit Seattle Art Museum by day, and then head over to Benaroya Hall to catch the evening's concert performance..
+4: Sublime Cliff Hotel
+Score            : 0.016393441706895828
+Caption Highlights: <em>Sublime Cliff</em> Hotel. Boutique.<em> Sublime Cliff Hotel</em> is located in the heart of the historic center of Sublime in an extremely vibrant and lively area within short walking distance to the sites and landmarks of the city and is surrounded by the extraordinary beauty of churches, buildings, shops and monuments.<em> Sublime Cliff</em> is part of a lovingly restored 1800 palace..
+2: Twin Dome Motel
+Score            : 0.0117647061124444
+Caption Highlights: Twin Dome Motel. Boutique. The<em> hotel</em> is situated<em> in a</em> nineteenth century plaza, which has been <em>expanded and</em> renovated<em> to the</em> highest architectural standards to create<em> a</em> modern, functional and first-class<em> hotel in</em> which art and unique historical elements coexist with the most modern comforts. The<em> hotel</em> also regularly hosts events like wine tastings, beer dinners, and live music..
+35: Suites At Bellevue Square
+Score            : 0.015384615398943424
+Caption Highlights: <em>Suites</em> At<em> Bellevue</em> Square. Extended-Stay. Comfortable city living in the very center of downtown<em> Bellevue.</em> Newly reimagined, this hotel features apartment-style<em> suites</em> with sleeping, living and work spaces. Located across the street from the Light Rail to downtown. Free shuttle to the airport..
+9: Smile Hotel
+Score            : 0.011904762126505375
+Caption Text      : Smile Hotel. Suite. Experience the fresh, modern downtown. Enjoy updated rooms, bold style & prime location. Don't miss our weekend live music series featuring who's new/next on the scene..
+19: Universe Motel
+Score            : 0.010989011265337467
+Caption Highlights: Universe Motel. Budget. Local, family-run<em> hotel</em> in bustling downtown Redmond. We are<em> a</em> pet-friendly establishment, near expansive Marymoor park, haven to pet owners, joggers, and sports enthusiasts. Close to the highway and just<em> a</em> short drive away from major cities..
+46: Swan Point Inn
+Score            : 0.009900989942252636
+Caption Highlights: Swan Point Inn. Budget. We serve<em> a</em> continental-style breakfast each morning, featuring<em> a</em> variety of food and drinks. Our locally made, oh-so-soft, caramel cinnamon rolls are<em> a</em> favorite with our guests. Other breakfast items include coffee, orange juice, milk, cereal, instant oatmeal, bagels, and muffins..
+44: Monrovia Motor Inn
+Score            : 0.009523809887468815
+Caption Highlights: <em>Monrovia Motor Inn.</em> Budget. Close to historic sites, local attractions, and urban parks. Free Shuttle to the airport and casinos. Free breakfast and WiFi..
+42: Bar C Resort & Campground
+Score            : 0.012500000186264515
+Caption Highlights: <em>Bar C</em> Resort & Campground. Resort and Spa.<em> Bar C</em> is nestled on 20 unspoiled acres on a private cove of Rock Bottom Lake. We feature both lodging and campground accommodations to suit just about every taste. Even though we are out of the traffic of the city, getting there is only a short drive away..
+13: Historic Lion Resort
+Score            : 0.011627906933426857
+Caption Highlights: Historic Lion Resort. Luxury. Unmatched Luxury. Visit our downtown hotel to indulge in luxury accommodations. Moments from the stadium, we feature<em> the</em> best in comfort.
+16: Double Sanctuary Resort
+Score            : 0.013698630034923553
+Caption Highlights: Double Sanctuary Resort. Resort and Spa. 5* Luxury<em> Hotel</em> - Biggest Rooms in the city.  #1<em> Hotel</em> in the area listed by Conde Nast Traveler. Free WiFi, Flexible check in/out, Fitness Center & Nespresso in room..
+7: Rose Motel
+Score            : 0.010526316240429878
+Caption Highlights: Rose Motel. Budget. Perfect<em> Location on Main Street.</em> Earn points while enjoying close proximity to<em> the city's</em> best shopping, restaurants,<em> and</em> attractions..
+12: Winter Panorama Resort
+Score            : 0.010416666977107525
+Caption Highlights: Winter Panorama Resort. Resort and Spa. Plenty of great skiing, outdoor ice skating, sleigh rides, tubing and snow biking. Yoga, group exercise classes and outdoor hockey are available year-round, plus numerous options for shopping as well as great<em> spa</em> services. Newly-renovated with large rooms, free 24-hr airport shuttle & a new restaurant. Rooms/suites offer mini-fridges & 49-inch HDTVs..
+40: Trails End Motel
+Score            : 0.010638297535479069
+Caption Text      : Trails End Motel. Budget. Only 8 miles from Downtown. On-site bar/restaurant, Free hot breakfast buffet, Free wireless internet, All non-smoking hotel. Only 15 miles from airport..
+39: Whitefish Lodge & Suites
+Score            : 0.014705882407724857
+Caption Text      : Whitefish Lodge & Suites. Resort and Spa. Located on in the heart of the forest. Enjoy Warm Weather, Beach Club Services, Natural Hot Springs, and our signature hot stone massage in the Cathedral of Firs. Relax in the meditation gardens, or join new friends around the communal firepit. Weekend evening entertainment on the patio features special guest musicians or poetry readings..
+8: Sapphire Suites
+Score            : 0.012987012974917889
+Caption Highlights: <em>Sapphire Suites. Suite.</em> Downtown in the heart of the business district. Close to everything. Leave your car behind and walk to the park, shopping, and restaurants..
+43: Johnson's Resort
+Score            : 0.013888888992369175
+Caption Highlights: Johnson's<em> Resort.</em><em> Resort</em> and Spa. Family oriented<em> resort</em> located<em> in the heart of</em> the northland. Operated since 1962 by the Smith family, we have grown into one of the largest<em> family resorts</em> in the state. The home of excellent Smallmouth Bass fishing with 10 small cabins, we're a home not only to fishermen but<em> their</em> families as well.
+23: Days Hotel
+Score            : 0.01515151560306549
+Caption Highlights: Days Hotel. Budget.<em> Mix and mingle in the heart of the city.</em> Shop and dine,<em> mix and mingle in the heart</em> of downtown, where fab lake views unite with a cheeky design..
+28: Inoku
+Score            : 0.01587301678955555
+Caption Highlights: Inoku. Luxury. Eco-friendly from our gardens to table, with<em> a</em> rooftop serenity pool and outdoor seating to take<em> in</em> the sunset. Just steps away from the Convention Center. Located<em> in the heart</em> of downtown with modern rooms with stunning city views, 24-7 dining options, free WiFi and easy valet parking..
+37: Commander Hotel
+Score            : 0.016129031777381897
+Caption Highlights: Commander Hotel. Budget. Right<em> in the heart</em> of campus. From meetings in town or gameday, enjoy our prime location between the union and steps away from the stadium..
+29: Thompson House
+Score            : 0.030621785670518875
+Caption Highlights: Thompson House. Budget.<em> Stay in the heart of downtown near the business district.</em> Experience the warmth of our<em> hotel.</em> Enjoy free WiFi, local transportation and Milk & Cookies..
+45: Arcadia Resort & Restaurant
+Score            : 0.01075268816202879
+Caption Highlights: Arcadia<em> Resort</em> & Restaurant.<em> Resort</em> and Spa. The largest year-round<em> resort</em> in the area offering more of everything for your vacation - at the best value! What can you enjoy while at the<em> resort,</em> aside from the mile-long sandy beaches of the lake? Check out our activities sure to excite both young and young-at-heart guests. We have it all, including being named "Property of the Year" and a "Top Ten<em> Resort"</em> by top publications..
+20: Esport Resort
+Score            : 0.010309278033673763
+Caption Highlights: Esport<em> Resort.</em><em> Resort</em> and Spa. The Best Gaming<em> Resort</em> in the area. With elegant rooms & suites, pool, cabanas, spa, brewery & world-class gaming. This is the best place to play, stay & dine..
+17: Antiquity Hotel
+Score            : 0.015625
+Caption Text      : Antiquity Hotel. Boutique. In vogue since 1888, the Antiquity Hotel takes you back to bygone era. From the crystal chandeliers that adorn the Green Room, to the arched ceilings of the Grand Hall, the elegance of old New York beckons. Elevate Your Experience. Upgrade to a premiere city skyline view for less, where old world charm combines with dramatic views of the city, local cathedral and midtown..
+38: Lady Of The Lake B & B
+Score            : 0.014285714365541935
+Caption Highlights: Lady Of The Lake B & B. Boutique. Nature is Home on the beach. Explore<em> the</em> shore by day, and then come home to our shared living space to relax around<em> a</em> stone fireplace, sip something warm, and explore<em> the</em> library by night. Save up to 30 percent. Valid Now through the end of the year. Restrictions and blackout may apply..
+48: Nordick's B & B
+Score            : 0.009803921915590763
+Caption Highlights: Nordick's B & B. Boutique. Only 90 miles (about 2 hours) from the nation's capital and nearby most everything the historic valley has to offer. Hiking? Wine Tasting? Exploring the caverns?<em> It's</em> all nearby and we have specially priced packages to help make our B&B your home base for fun while visiting the valley..
+30: Catfish Creek Fishing Cabins
+Score            : 0.009433962404727936
+Caption Highlights: Catfish Creek Fishing Cabins. Budget. Best bites along the<em> Colorado river,</em> but only if you know where to go!<em> Fishing</em> expeditions offered daily. Package deals include professional guides, gear, lunch, and<em> fishing</em> licenses. .
+Total number of search results:47
+Simple Hybrid Search Results:
+Score 0.03333333507180214: 1: Secret Point Hotel
+Score 0.030621785670518875: 29: Thompson House
+Score 0.0265975221991539: 15: Peaceful Market Hotel
+Score 0.016393441706895828: 4: Sublime Cliff Hotel
+Score 0.016129031777381897: 37: Commander Hotel
+Score 0.01587301678955555: 28: Inoku
+Score 0.015625: 17: Antiquity Hotel
+Score 0.015384615398943424: 35: Suites At Bellevue Square
+Score 0.01515151560306549: 23: Days Hotel
+Score 0.014925372786819935: 14: Twin Vertex Hotel
+Score 0.014705882407724857: 39: Whitefish Lodge & Suites
+Score 0.014285714365541935: 38: Lady Of The Lake B & B
+Score 0.014084506779909134: 5: Scarlet Harbor Hotel
+Score 0.013888888992369175: 43: Johnson's Resort
+Score 0.013698630034923553: 16: Double Sanctuary Resort
+Score 0.013513513840734959: 41: Ocean Air Motel
+Score 0.013333333656191826: 3: Triple Landscape Hotel
+Score 0.01315789483487606: 50: Summer Wind Resort
+Score 0.012987012974917889: 8: Sapphire Suites
+Score 0.012820512987673283: 6: King's Palace Hotel
+Score 0.012658228166401386: 32: Goldmoor Inn
+Score 0.012500000186264515: 42: Bar C Resort & Campground
+Score 0.012345679104328156: 31: Athens Residence Hotel
+Score 0.012195121496915817: 47: South Court Inn
+Score 0.012048192322254181: 24: La Vista Hotel
+Score 0.011904762126505375: 9: Smile Hotel
+Score 0.0117647061124444: 2: Twin Dome Motel
+Score 0.011627906933426857: 13: Historic Lion Resort
+Score 0.01149425283074379: 36: Pelham Hotel
+Score 0.011363636702299118: 33: Mottelers Thunderbird Motel
+Score 0.01123595517128706: 49: Old Carrabelle Hotel
+Score 0.011111111380159855: 18: Oceanside Resort
+Score 0.010989011265337467: 19: Universe Motel
+Score 0.010869565419852734: 25: Scottish Inn
+Score 0.01075268816202879: 45: Arcadia Resort & Restaurant
+Score 0.010638297535479069: 40: Trails End Motel
+Score 0.010526316240429878: 7: Rose Motel
+Score 0.010416666977107525: 12: Winter Panorama Resort
+Score 0.010309278033673763: 20: Esport Resort
+Score 0.010101010091602802: 11: Regal Orb Residence Inn
+Score 0.009999999776482582: 21: Nova Hotel
+Score 0.009900989942252636: 46: Swan Point Inn
+Score 0.009803921915590763: 48: Nordick's B & B
+Score 0.009708737954497337: 27: Super Deluxe Inn & Suites
+Score 0.009615384973585606: 34: Cap'n Jack's Waterfront Inn
+Score 0.009523809887468815: 44: Monrovia Motor Inn
+Score 0.009433962404727936: 30: Catfish Creek Fishing Cabins
+Total number of search results:47
