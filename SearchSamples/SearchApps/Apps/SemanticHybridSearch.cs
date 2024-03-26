@@ -62,9 +62,9 @@ namespace SearchApps.Apps
         {
             _logger.LogTrace($"{this.GetType().Name} Started");
 
-            // await CreateIndexAsync();
+            await CreateIndexAsync();
 
-            //await LoadIndexAsync();
+            await LoadIndexAsync();
 
             await SemanticSearchAsync("Is there any hotel located on the main commercial artery of the city in the heart of New York?");
 
@@ -82,6 +82,16 @@ namespace SearchApps.Apps
         }
         private async Task CreateIndexAsync()
         {
+            try
+            {
+                _indexClient.GetIndex(_indexName);
+                _indexClient.DeleteIndex(_indexName);
+            }
+            catch (RequestFailedException ex) when (ex.Status == 404)
+            {
+                //if the specified index not exist, 404 will be thrown.
+            }
+
             string vectorSearchProfileName = "my-vector-profile";
             string vectorSearchHnswConfig = "my-hsnw-vector-config";
             int modelDimensions = 1536;

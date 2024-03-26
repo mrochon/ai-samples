@@ -69,7 +69,7 @@ namespace SearchApps.Apps
             Console.WriteLine("Creating or updating the skillset...");
             var skills = new List<SearchIndexerSkill>()
             {
-                //CreateDocumentExtractionSkill(),
+                CreateDocumentExtractionSkill(),
                 CreateLanguageDetectionSkill(),
                 CreateSplitSkill(),
                 CreateKeyPhraseExtractionSkill(),
@@ -147,9 +147,9 @@ namespace SearchApps.Apps
         private static DocumentExtractionSkill CreateDocumentExtractionSkill()
         {
             List<InputFieldMappingEntry> inputMappings = new List<InputFieldMappingEntry>();
-            inputMappings.Add(new InputFieldMappingEntry("file")
+            inputMappings.Add(new InputFieldMappingEntry("file_data")
             {
-                Source = "/document/merged_text"
+                Source = "/document/file_data"
             });
 
             List<OutputFieldMappingEntry> outputMappings = new List<OutputFieldMappingEntry>();
@@ -157,20 +157,15 @@ namespace SearchApps.Apps
             {
                 TargetName = "extracted_content"
             });
-            var configuration = new Dictionary<string, object>()
-                {
-                    { "delimitedTextHeaders", "name,postalCode,province,reviews_date,reviews_dateAdded,reviews_rating,reviews_text,reviews_title" },
-                    { "delimitedTextDelimiter", "," }
-                };
             var documentExtractionSkill = new DocumentExtractionSkill(inputMappings, outputMappings)
             {
                 Description = "Break multi-line csv file into one document per line",
                 Context = "/document",
-                ParsingMode = BlobIndexerParsingMode.DelimitedText
+                ParsingMode = BlobIndexerParsingMode.Default
             };
-            documentExtractionSkill.Configuration.Add("dataToExtract", "contentAndMetadata");
-            documentExtractionSkill.Configuration.Add("delimitedTextDelimiter", ",");
-
+            //documentExtractionSkill.Configuration.Add("dataToExtract", "contentAndMetadata");
+            //documentExtractionSkill.Configuration.Add("delimitedTextDelimiter", ",");
+            //documentExtractionSkill.Configuration.Add("delimitedTextHeaders", "name,postalCode,province,reviews_date,reviews_dateAdded,reviews_rating,reviews_text,reviews_title");
             return documentExtractionSkill;
         }
         private static LanguageDetectionSkill CreateLanguageDetectionSkill()
