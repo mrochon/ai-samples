@@ -26,6 +26,8 @@ builder.Services.AddOptions()
     .AddLogging(builder => builder.AddConsole())
     //.AddHostedService<HelloWorld>();
     //.AddHostedService<Service>();
-    .AddHostedService<SemanticHybridSearch>();
+    //.AddHostedService<VectorSearch>();
+    //.AddHostedService<SemanticHybridSearch>();
+    .AddHostedService<SkillsPipeline>();
 
 builder.Build().Run();

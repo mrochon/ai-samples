@@ -90,6 +90,15 @@ namespace SearchApps.Apps
             string vectorSearchProfileName = "my-vector-profile";
             string vectorSearchHnswConfig = "my-hsnw-vector-config";
             int modelDimensions = 1536;
+            try
+            {
+                _indexClient.GetIndex(_indexName);
+                _indexClient.DeleteIndex(_indexName);
+            }
+            catch (RequestFailedException ex) when (ex.Status == 404)
+            {
+                //if the specified index not exist, 404 will be thrown.
+            }
 
             SearchIndex searchIndex = new(_indexName)
             {

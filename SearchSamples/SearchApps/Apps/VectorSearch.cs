@@ -198,6 +198,7 @@ namespace SearchApps.Apps
 
             int count = 0;
             Console.WriteLine($"Simple Hybrid Search Results:");
+            Console.WriteLine(query);
             await foreach (SearchResult<Hotel> result in response.GetResultsAsync())
             {
                 count++;
@@ -224,6 +225,8 @@ namespace SearchApps.Apps
 
             int count = 0;
             Console.WriteLine($"Multi Vector Search Results:");
+            Console.WriteLine(query1);
+            Console.WriteLine(query2);
             await foreach (SearchResult<Hotel> result in response.GetResultsAsync())
             {
                 count++;
@@ -247,6 +250,7 @@ namespace SearchApps.Apps
 
             int count = 0;
             Console.WriteLine($"Multi Fields Vector Search Results:");
+            Console.WriteLine(query);
             await foreach (SearchResult<Hotel> result in response.GetResultsAsync())
             {
                 count++;
