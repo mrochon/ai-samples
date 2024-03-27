@@ -1,0 +1,50 @@
+﻿{
+  "@odata.context": "https://mropenaisearch.search.windows.net/$metadata#indexers/$entity",
+  "@odata.etag": "\"0x8DC4EA254AD1171\"",
+  "name": "reviews-indexer",
+  "description": "",
+  "dataSourceName": "hotelreviewscsv",
+  "skillsetName": "azureblob-skillset",
+  "targetIndexName": "azureblob-index",
+  "disabled": null,
+  "schedule": null,
+  "parameters": {
+    "batchSize": null,
+    "maxFailedItems": 0,
+    "maxFailedItemsPerBatch": 0,
+    "base64EncodeKeys": null,
+    "configuration": {
+      "dataToExtract": "contentAndMetadata",
+      "parsingMode": "delimitedText",
+      "firstLineContainsHeaders": true,
+      "delimitedTextDelimiter": ",",
+      "delimitedTextHeaders": ""
+    }
+  },
+  "fieldMappings": [
+    {
+      "sourceFieldName": "AzureSearch_DocumentKey",
+      "targetFieldName": "AzureSearch_DocumentKey",
+      "mappingFunction": {
+        "name": "base64Encode",
+        "parameters": null
+      }
+    }
+  ],
+  "outputFieldMappings": [
+    {
+      "sourceFieldName": "/document/address/organizations",
+      "targetFieldName": "organizations"
+    },
+    {
+      "sourceFieldName": "/document/address/locations",
+      "targetFieldName": "locations"
+    },
+    {
+      "sourceFieldName": "/document/address/translated_text",
+      "targetFieldName": "translated_text"
+    }
+  ],
+  "cache": null,
+  "encryptionKey": null
+}
