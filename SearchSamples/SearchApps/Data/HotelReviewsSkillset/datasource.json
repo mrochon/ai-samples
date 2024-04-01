@@ -1,19 +1,14 @@
 ﻿{
   "@odata.context": "https://mropenaisearch.search.windows.net/$metadata#datasources/$entity",
-  "@odata.etag": "\"0x8DC4EA24FE036A2\"",
-  "name": "hotelreviewscsv",
-  "description": null,
+  "name": "DATASOURCE_NAME",
+  "description": "CSV file with hotel reviews",
   "type": "azureblob",
   "subtype": null,
   "credentials": {
-    "connectionString": "DefaultEndpointsProtocol=https;AccountName=ai84ad;AccountKey=..."
+    "connectionString": "CONNECTION_STRING"
   },
   "container": {
-    "name": "hotelreviews",
+    "name": "CONTAINER_NAME",
     "query": null
-  },
-  "dataChangeDetectionPolicy": null,
-  "dataDeletionDetectionPolicy": null,
-  "encryptionKey": null,
-  "identity": null
+  }
 }

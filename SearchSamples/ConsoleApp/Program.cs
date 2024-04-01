@@ -28,6 +28,7 @@ builder.Services.AddOptions()
     //.AddHostedService<Service>();
     //.AddHostedService<VectorSearch>();
     //.AddHostedService<SemanticHybridSearch>();
-    .AddHostedService<SkillsPipeline>();
+    //.AddHostedService<SkillsPipeline>();
+    .AddHostedService<SkillsPipelineWithJson>();
 
 builder.Build().Run();

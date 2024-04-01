@@ -1,50 +1,8 @@
-﻿
- {
-    "name": "INDEX_NAME",
-    "vectorSearch": {
-      "algorithms": [
-        {
-          "name": "myalgo",
-          "kind": "hnsw"
-        }
-      ],
-      "vectorizers": [
-        {
-          "name": "openai",
-          "kind": "azureOpenAI",
-          "azureOpenAIParameters": {
-            "resourceUri": "RESOURCE_URI",
-            "apiKey": "API_KEY",
-            "deploymentId": "DEPLOYMENT_ID"
-          }
-        }
-      ],
-      "profiles": [
-        {
-          "name": "my_vector_profile",
-          "algorithm": "myalgo",
-          "vectorizer": "openai"
-        }
-      ]
-    },
-    "semantic": {
-      "configurations": [
-        {
-          "name": "my-semantic-config",
-          "prioritizedFields": {
-            "titleField": {
-              "fieldName": "reviews_username"
-            },
-            "prioritizedContentFields": [
-              {
-                "fieldName": "reviews_text"
-              }
-            ],
-            "prioritizedKeywordsFields": []
-          }
-        }
-      ]
-    },
+﻿{
+  "@odata.context": "https://mropenaisearch.search.windows.net/$metadata#indexes/$entity",
+  "@odata.etag": "\"0x8DC4EA2509B5518\"",
+  "name": "azureblob-index",
+  "defaultScoringProfile": "",
   "fields": [
     {
       "name": "address",
@@ -67,7 +25,7 @@
       "name": "categories",
       "type": "Edm.String",
       "searchable": false,
-      "filterable": false,
+      "filterable": true,
       "retrievable": true,
       "sortable": false,
       "facetable": false,
@@ -152,7 +110,7 @@
       "name": "name",
       "type": "Edm.String",
       "searchable": false,
-      "filterable": false,
+      "filterable": true,
       "retrievable": true,
       "sortable": false,
       "facetable": false,
@@ -169,8 +127,8 @@
       "name": "postalCode",
       "type": "Edm.String",
       "searchable": false,
-      "filterable": false,
-      "retrievable": false,
+      "filterable": true,
+      "retrievable": true,
       "sortable": false,
       "facetable": false,
       "key": false,
@@ -204,8 +162,8 @@
       "type": "Edm.DateTimeOffset",
       "searchable": false,
       "filterable": false,
-      "retrievable": true,
-      "sortable": true,
+      "retrievable": false,
+      "sortable": false,
       "facetable": false,
       "key": false,
       "indexAnalyzer": null,
@@ -238,7 +196,7 @@
       "type": "Edm.String",
       "searchable": false,
       "filterable": false,
-      "retrievable": false,
+      "retrievable": true,
       "sortable": false,
       "facetable": false,
       "key": false,
@@ -254,7 +212,7 @@
       "name": "reviews_text",
       "type": "Edm.String",
       "searchable": true,
-      "filterable": false,
+      "filterable": true,
       "retrievable": true,
       "sortable": false,
       "facetable": false,
@@ -268,19 +226,11 @@
       "synonymMaps": []
     },
     {
-      "name": "reviews_textVector",
-      "type": "Collection(Edm.Single)",
-      "searchable": true,
-      "retrievable": true,
-      "dimensions": 1536,
-      "vectorSearchProfile": "my_vector_profile"
-    },
-    {
       "name": "reviews_title",
       "type": "Edm.String",
       "searchable": false,
       "filterable": false,
-      "retrievable": false,
+      "retrievable": true,
       "sortable": false,
       "facetable": false,
       "key": false,
@@ -446,6 +396,23 @@
       "synonymMaps": []
     },
     {
+      "name": "organizations",
+      "type": "Collection(Edm.String)",
+      "searchable": true,
+      "filterable": false,
+      "retrievable": true,
+      "sortable": false,
+      "facetable": false,
+      "key": false,
+      "indexAnalyzer": null,
+      "searchAnalyzer": null,
+      "analyzer": "standard.lucene",
+      "normalizer": null,
+      "dimensions": null,
+      "vectorSearchProfile": null,
+      "synonymMaps": []
+    },
+    {
       "name": "locations",
       "type": "Collection(Edm.String)",
       "searchable": true,
@@ -461,6 +428,39 @@
       "dimensions": null,
       "vectorSearchProfile": null,
       "synonymMaps": []
+    },
+    {
+      "name": "translated_text",
+      "type": "Edm.String",
+      "searchable": true,
+      "filterable": false,
+      "retrievable": true,
+      "sortable": false,
+      "facetable": false,
+      "key": false,
+      "indexAnalyzer": null,
+      "searchAnalyzer": null,
+      "analyzer": "en.lucene",
+      "normalizer": null,
+      "dimensions": null,
+      "vectorSearchProfile": null,
+      "synonymMaps": []
     }
-  ]
-  }
+  ],
+  "scoringProfiles": [],
+  "corsOptions": null,
+  "suggesters": [],
+  "analyzers": [],
+  "normalizers": [],
+  "tokenizers": [],
+  "tokenFilters": [],
+  "charFilters": [],
+  "encryptionKey": null,
+  "similarity": {
+    "@odata.type": "#Microsoft.Azure.Search.BM25Similarity",
+    "k1": null,
+    "b": null
+  },
+  "semantic": null,
+  "vectorSearch": null
+}

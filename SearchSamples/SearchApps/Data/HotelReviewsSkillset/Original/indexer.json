@@ -32,8 +32,16 @@
   ],
   "outputFieldMappings": [
     {
+      "sourceFieldName": "/document/address/organizations",
+      "targetFieldName": "organizations"
+    },
+    {
       "sourceFieldName": "/document/address/locations",
       "targetFieldName": "locations"
+    },
+    {
+      "sourceFieldName": "/document/address/translated_text",
+      "targetFieldName": "translated_text"
     }
   ],
   "encryptionKey": null

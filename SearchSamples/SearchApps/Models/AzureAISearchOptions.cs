@@ -8,6 +8,7 @@ namespace SearchApps.Models
 {
     public class AzureAISearchOptions
     {
+        public string? ServiceName { get; set; }
         public string? Endpoint { get; set; }
         public string? Key { get; set; }
         public string? AdminKey { get; set; }

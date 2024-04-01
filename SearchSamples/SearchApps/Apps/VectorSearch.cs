@@ -47,8 +47,8 @@ namespace SearchApps.Apps
             _credential = new AzureKeyCredential(_searchOptions.Value.AdminKey);
             _indexClient = new SearchIndexClient(_endpoint, _credential);
 
-            _indexName = "hotelsv";
-            _dataSourceConnectionName = "hotelsv";
+            _indexName = "hotels-vector";
+            _dataSourceConnectionName = "hotels-vector";
         }
         public async Task StartAsync(CancellationToken cancellationToken)
         {
