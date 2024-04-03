@@ -25,6 +25,7 @@ namespace SKApps.Services
             string collectionName,
             ReadOnlyMemory<float> vector,
             List<string>? searchFields = null,
+            string filter = "",
             CancellationToken cancellationToken = default);
     }
 
@@ -55,14 +56,14 @@ namespace SKApps.Services
 
         public int Count { get; set; }
 
-        public async Task<string?> SearchAsync(string collectionName, ReadOnlyMemory<float> vector, List<string>? searchFields = null, CancellationToken cancellationToken = default)
+        public async Task<string?> SearchAsync(string collectionName, ReadOnlyMemory<float> vector, List<string>? searchFields = null, string filter = "", CancellationToken cancellationToken = default)
         {
             _logger.LogTrace($"Vector Search using: {collectionName}");
             SearchClient client = new(new Uri(_options.Value.Endpoint), collectionName, new AzureKeyCredential(_options.Value.Key));
 
             var searchOptions = new SearchOptions
             {
-
+                Filter = filter,
                 VectorSearch = new()
                 {
                     Queries = { new VectorizedQuery(vector) { KNearestNeighborsCount = Count } }

@@ -55,9 +55,12 @@ namespace SKApps
         {
             _logger.LogTrace($"{this.GetType().Name} Started");
             // Query with index name and search fields.
-            var arguments = new KernelArguments { ["searchFields"] = JsonSerializer.Serialize(new List<string> { "DescriptionVector" }) };
+            var arguments = new KernelArguments {
+                ["searchFields"] = JsonSerializer.Serialize(new List<string> { "DescriptionVector" }),
+                ["filter"] = "Category eq 'Budget'"
+            };
             var result = await _kernel.InvokePromptAsync(
-                "{{AISearch 'Seaview apartments, small' collection='hotels' searchFields=$searchFields}} I am looking for a hotel with seaview?",
+                "{{AISearch 'Seaview apartments, small' collection='hotels' searchFields=$searchFields filter=$filter}} I am looking for a hotel with seaview?",
                 arguments);
 
             Console.WriteLine(result);

@@ -38,6 +38,7 @@ namespace SKApps.Plugins
             string query,
             string collection,
             List<string>? searchFields = null,
+            string filter = "",
             CancellationToken cancellationToken = default)
         {
             _logger.LogTrace($"SearchAsync using: {collection}");
@@ -47,10 +48,10 @@ namespace SKApps.Plugins
             (float[] embedding, int tokens) = await this._textEmbeddingGenerationService.GetEmbeddingsAsync(Guid.NewGuid().ToString(), query);
             _logger.LogTrace($"SearchAsync: Generated embeddings. Used {query} tokens.");
             // Perform search
-            var docs = await this._searchService.SearchAsync(collection, embedding, searchFields, cancellationToken);
-            var resp = docs.Aggregate(new StringBuilder(), (sb, doc) => sb.AppendLine(doc.ToString())).ToString();
-            _logger.LogTrace($"SearchAsync: result: {resp}");
-            return resp;
+            var docs = await this._searchService.SearchAsync(collection, embedding, searchFields, filter, cancellationToken);
+            //var resp = docs.Aggregate(new StringBuilder(), (sb, doc) => sb.AppendLine(doc.ToString())).ToString();
+            _logger.LogTrace($"SearchAsync: result: {docs}");
+            return docs;
         }
     }
 }
