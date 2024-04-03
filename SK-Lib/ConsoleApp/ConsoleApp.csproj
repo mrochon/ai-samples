@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SKApps\SKApps.csproj" />
+    <ProjectReference Include="..\SKApps\SKLib.csproj" />
   </ItemGroup>
 
   <ItemGroup>

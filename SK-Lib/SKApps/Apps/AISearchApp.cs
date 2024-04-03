@@ -54,25 +54,13 @@ namespace SKApps
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             _logger.LogTrace($"{this.GetType().Name} Started");
-
-            // Query with index name
-            // The final prompt will look like this "Emily and David are...(more text based on data). Who is David?".
-            var result1 = await _kernel.InvokePromptAsync(
-                "{{search 'Apartments with seaview' collection='properties'} Apartment with view of the sea?");
-
-            Console.WriteLine(result1);
-
             // Query with index name and search fields.
-            // Search fields are optional. Since one index may contain multiple searchable fields,
-            // it's possible to specify which fields should be used during search for each request.
-            var arguments = new KernelArguments { ["searchFields"] = JsonSerializer.Serialize(new List<string> { "Embedding" }) };
-
-            // The final prompt will look like this "Elara is...(more text based on data). Who is Elara?".
-            var result2 = await _kernel.InvokePromptAsync(
-                "{{search 'Seaview apartments, small' collection='properties' searchFields=$searchFields}} How big are apartments with seaview?",
+            var arguments = new KernelArguments { ["searchFields"] = JsonSerializer.Serialize(new List<string> { "DescriptionVector" }) };
+            var result = await _kernel.InvokePromptAsync(
+                "{{AISearch 'Seaview apartments, small' collection='hotels' searchFields=$searchFields}} I am looking for a hotel with seaview?",
                 arguments);
 
-            Console.WriteLine(result2);
+            Console.WriteLine(result);
 
             _logger.LogTrace($"{this.GetType().Name} Done");
             await StopAsync(cancellationToken);

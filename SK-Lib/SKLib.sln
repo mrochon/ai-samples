@@ -5,7 +5,7 @@ VisualStudioVersion = 17.9.34701.34
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp", "ConsoleApp\ConsoleApp.csproj", "{3A3BA322-73EF-45A6-A43E-D6AE0117D6F5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SKApps", "SKApps\SKApps.csproj", "{E8237A91-6EEF-48AB-B570-B9D87ECC9EA8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SKLib", "SKApps\SKLib.csproj", "{E8237A91-6EEF-48AB-B570-B9D87ECC9EA8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
