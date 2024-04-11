@@ -16,6 +16,7 @@ using Amazon.Runtime.Internal.Util;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver.Linq;
 using MongoDB.Driver;
+using SKLib.Models;
 
 namespace SKApps.Services
 {
@@ -86,32 +87,6 @@ namespace SKApps.Services
             // The logic and decision which text data to return should be based on business scenario. 
             _logger.LogTrace($"Vector Search result length: {results.Length}");
             return results.ToString();
-        }
-
-        public sealed class IndexSchema
-        {
-            [JsonPropertyName("chunk_id")]
-            public string ChunkId { get; set; }
-
-            [JsonPropertyName("parent_id")]
-            public string ParentId { get; set; }
-
-            [JsonPropertyName("chunk")]
-            public string Chunk { get; set; }
-
-            [JsonPropertyName("title")]
-            public string Title { get; set; }
-
-            [JsonPropertyName("vector")]
-            public ReadOnlyMemory<float> Vector { get; set; }
-        }
-
-        public class PropertyIndexModel
-        {
-            public string? Id { get; set; }
-            public string? Name { get; set; }
-            public string? Description { get; set; }
-            //public ReadOnlyMemory<float> Embedding { get; set; }
         }
     }
 }
