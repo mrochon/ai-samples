@@ -12,6 +12,7 @@
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
+.env
 
 # Mono auto generated files
 mono_crash.*
@@ -398,3 +399,4 @@ FodyWeavers.xsd
 *.sln.iml
 NotebookSK/config/secrets.json
 NotebookAI/config/secrets.json
+Search-Json/.env
