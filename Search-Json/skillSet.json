@@ -1,90 +1,90 @@
 {
-    "@odata.context": "https://mropenaisearch.search.windows.net/$metadata#skillsets/$entity",
-    "@odata.etag": "\"0x8DC59DAEE959E97\"",
-    "name": "manuals2-skillset",
-    "description": "Created from json edit",
-    "skills": [
-      {
-        "@odata.type": "#Microsoft.Skills.Text.PIIDetectionSkill",
-        "name": "#1",
-        "description": null,
-        "context": "/document/content",
-        "defaultLanguageCode": "en",
-        "minimumPrecision": 0.5,
-        "maskingMode": "replace",
-        "maskingCharacter": "*",
-        "modelVersion": null,
-        "piiCategories": [],
-        "domain": "none",
-        "inputs": [
-          {
-            "name": "text",
-            "source": "/document/content"
-          }
-        ],
-        "outputs": [
-          {
-            "name": "piiEntities",
-            "targetName": "pii_entities"
-          },
-          {
-            "name": "maskedText",
-            "targetName": "masked_text"
-          }
-        ]
-      },
-      {
-        "@odata.type": "#Microsoft.Skills.Text.SplitSkill",
-        "name": "#2",
-        "description": "Split skill to chunk documents",
-        "context": "/document",
-        "defaultLanguageCode": "en",
-        "textSplitMode": "pages",
-        "maximumPageLength": 300,
-        "pageOverlapLength": 50,
-        "maximumPagesToTake": 0,
-        "inputs": [
-          {
-            "name": "text",
-            "source": "/document/content"
-          }
-        ],
-        "outputs": [
-          {
-            "name": "textItems",
-            "targetName": "pages"
-          }
-        ]
-      },
-      {
-        "@odata.type": "#Microsoft.Skills.Text.AzureOpenAIEmbeddingSkill",
-        "name": "#3",
-        "description": null,
-        "context": "/document/pages/*",
-        "resourceUri": "https://mrtestai.openai.azure.com",
-        "apiKey": "<redacted>",
-        "deploymentId": "mrtextembeddingada002",
-        "inputs": [
-          {
-            "name": "text",
-            "source": "/document/pages/*"
-          }
-        ],
-        "outputs": [
-          {
-            "name": "embedding",
-            "targetName": "vector"
-          }
-        ],
-        "authIdentity": null
-      }      
-    ],
-    "cognitiveServices": {
-      "@odata.type": "#Microsoft.Azure.Search.CognitiveServicesByKey",
-      "description": "/subscriptions/56815821-7deb-4dce-8c2a-374756037a1e/resourceGroups/AI/providers/Microsoft.CognitiveServices/accounts/mraiskillsets",
-      "key": "<ServicesKey>"
+  "@odata.context": "https://mropenaisearch.search.windows.net/$metadata#skillsets/$entity",
+  "@odata.etag": "\"0x8DC59DAEE959E97\"",
+  "name": "manuals2-skillset",
+  "description": "Created from json edit",
+  "skills": [
+    {
+      "@odata.type": "#Microsoft.Skills.Text.SplitSkill",
+      "name": "#2",
+      "description": "Split skill to chunk documents",
+      "context": "/document",
+      "defaultLanguageCode": "en",
+      "textSplitMode": "pages",
+      "maximumPageLength": 300,
+      "pageOverlapLength": 50,
+      "maximumPagesToTake": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "source": "/document/content"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "textItems",
+          "targetName": "pages"
+        }
+      ]
     },
-    "knowledgeStore": null,
-    "indexProjections": null,
-    "encryptionKey": null
-  }
+    {
+      "@odata.type": "#Microsoft.Skills.Text.PIIDetectionSkill",
+      "name": "#1",
+      "description": null,
+      "context": "/document/pages/*",
+      "defaultLanguageCode": "en",
+      "minimumPrecision": 0.5,
+      "maskingMode": "replace",
+      "maskingCharacter": "*",
+      "modelVersion": null,
+      "piiCategories": [],
+      "domain": "none",
+      "inputs": [
+        {
+          "name": "text",
+          "source": "/document/pages/*/textItems/*"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "piiEntities",
+          "targetName": "pii_entities"
+        },
+        {
+          "name": "maskedText",
+          "targetName": "masked_text"
+        }
+      ]
+    },
+    {
+      "@odata.type": "#Microsoft.Skills.Text.AzureOpenAIEmbeddingSkill",
+      "name": "#3",
+      "description": null,
+      "context": "/document/pages/*",
+      "resourceUri": "https://mrtestai.openai.azure.com",
+      "apiKey": "<redacted>",
+      "deploymentId": "mrtextembeddingada002",
+      "inputs": [
+        {
+          "name": "text",
+          "source": "/document/pages/*"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "embedding",
+          "targetName": "vector"
+        }
+      ],
+      "authIdentity": null
+    }
+  ],
+  "cognitiveServices": {
+    "@odata.type": "#Microsoft.Azure.Search.CognitiveServicesByKey",
+    "description": "/subscriptions/56815821-7deb-4dce-8c2a-374756037a1e/resourceGroups/AI/providers/Microsoft.CognitiveServices/accounts/mraiskillsets",
+    "key": "<redacted>"
+  },
+  "knowledgeStore": null,
+  "indexProjections": null,
+  "encryptionKey": null
+}
