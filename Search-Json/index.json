@@ -1,7 +1,7 @@
 {
   "@odata.context": "https://mropenaisearch.search.windows.net/$metadata#indexes/$entity",
   "@odata.etag": "\"0x8DC59DAEE5B36D7\"",
-  "name": "manuals2",
+  "name": "INDEX_NAME",
   "defaultScoringProfile": "",
   "fields": [
     {
@@ -289,7 +289,7 @@
         "azureOpenAIParameters": {
           "resourceUri": "https://mrtestai.openai.azure.com",
           "deploymentId": "mrtextembeddingada002",
-          "apiKey": "<redacted>",
+          "apiKey": "OPENAI_API_KEY",
           "authIdentity": null
         },
         "customWebApiParameters": null

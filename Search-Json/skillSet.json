@@ -1,7 +1,7 @@
 {
   "@odata.context": "https://mropenaisearch.search.windows.net/$metadata#skillsets/$entity",
   "@odata.etag": "\"0x8DC59DAEE959E97\"",
-  "name": "manuals2-skillset",
+  "name": "SKILLSET_NAME",
   "description": "Created from json edit",
   "skills": [
     {
@@ -82,7 +82,7 @@
   "cognitiveServices": {
     "@odata.type": "#Microsoft.Azure.Search.CognitiveServicesByKey",
     "description": "/subscriptions/56815821-7deb-4dce-8c2a-374756037a1e/resourceGroups/AI/providers/Microsoft.CognitiveServices/accounts/mraiskillsets",
-    "key": "<redacted>"
+    "key": "AI_SERVICE_KEY"
   },
   "knowledgeStore": null,
   "indexProjections": null,

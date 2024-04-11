@@ -1,11 +1,11 @@
 {
     "@odata.context": "https://mropenaisearch.search.windows.net/$metadata#indexers/$entity",
     "@odata.etag": "\"0x8DC59DAF7632D5F\"",
-    "name": "manuals2-indexer",
+    "name": "INDEXER_NAME",
     "description": "",
-    "dataSourceName": "manuals",
-    "skillsetName": "manuals2-skillset",
-    "targetIndexName": "manuals2",
+    "dataSourceName": "DATA_SOURCE_NAME",
+    "skillsetName": "SKILLSET_NAME",
+    "targetIndexName": "INDEX_NAME",
     "disabled": null,
     "schedule": null,
     "parameters": {
