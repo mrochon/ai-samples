@@ -1,30 +1,37 @@
 {
     "@odata.context": "https://mropenaisearch.search.windows.net/$metadata#skillsets/$entity",
-    "@odata.etag": "\"0x8DC59AEA8F2B44A\"",
-    "name": "manuals-skillset",
-    "description": "Skillset to chunk documents and generate embeddings",
+    "@odata.etag": "\"0x8DC59DAEE959E97\"",
+    "name": "manuals2-skillset",
+    "description": "Created from json edit",
     "skills": [
       {
-        "@odata.type": "#Microsoft.Skills.Text.AzureOpenAIEmbeddingSkill",
+        "@odata.type": "#Microsoft.Skills.Text.PIIDetectionSkill",
         "name": "#1",
         "description": null,
-        "context": "/document/pages/*",
-        "resourceUri": "https://mrtestai.openai.azure.com",
-        "apiKey": "<redacted>",
-        "deploymentId": "mrtextembeddingada002",
+        "context": "/document/content",
+        "defaultLanguageCode": "en",
+        "minimumPrecision": 0.5,
+        "maskingMode": "replace",
+        "maskingCharacter": "*",
+        "modelVersion": null,
+        "piiCategories": [],
+        "domain": "none",
         "inputs": [
           {
             "name": "text",
-            "source": "/document/pages/*"
+            "source": "/document/content"
           }
         ],
         "outputs": [
           {
-            "name": "embedding",
-            "targetName": "vector"
+            "name": "piiEntities",
+            "targetName": "pii_entities"
+          },
+          {
+            "name": "maskedText",
+            "targetName": "masked_text"
           }
-        ],
-        "authIdentity": null
+        ]
       },
       {
         "@odata.type": "#Microsoft.Skills.Text.SplitSkill",
@@ -48,43 +55,36 @@
             "targetName": "pages"
           }
         ]
-      }
+      },
+      {
+        "@odata.type": "#Microsoft.Skills.Text.AzureOpenAIEmbeddingSkill",
+        "name": "#3",
+        "description": null,
+        "context": "/document/pages/*",
+        "resourceUri": "https://mrtestai.openai.azure.com",
+        "apiKey": "<redacted>",
+        "deploymentId": "mrtextembeddingada002",
+        "inputs": [
+          {
+            "name": "text",
+            "source": "/document/pages/*"
+          }
+        ],
+        "outputs": [
+          {
+            "name": "embedding",
+            "targetName": "vector"
+          }
+        ],
+        "authIdentity": null
+      }      
     ],
     "cognitiveServices": {
-      "@odata.type": "#Microsoft.Azure.Search.DefaultCognitiveServices"
+      "@odata.type": "#Microsoft.Azure.Search.CognitiveServicesByKey",
+      "description": "/subscriptions/56815821-7deb-4dce-8c2a-374756037a1e/resourceGroups/AI/providers/Microsoft.CognitiveServices/accounts/mraiskillsets",
+      "key": "<ServicesKey>"
     },
     "knowledgeStore": null,
-    "indexProjections": {
-      "selectors": [
-        {
-          "targetIndexName": "manuals",
-          "parentKeyFieldName": "parent_id",
-          "sourceContext": "/document/pages/*",
-          "mappings": [
-            {
-              "name": "chunk",
-              "source": "/document/pages/*",
-              "sourceContext": null,
-              "inputs": []
-            },
-            {
-              "name": "vector",
-              "source": "/document/pages/*/vector",
-              "sourceContext": null,
-              "inputs": []
-            },
-            {
-              "name": "title",
-              "source": "/document/metadata_storage_name",
-              "sourceContext": null,
-              "inputs": []
-            }
-          ]
-        }
-      ],
-      "parameters": {
-        "projectionMode": "skipIndexingParentDocuments"
-      }
-    },
+    "indexProjections": null,
     "encryptionKey": null
   }

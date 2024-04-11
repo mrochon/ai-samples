@@ -1,7 +1,7 @@
 {
     "@odata.context": "https://mropenaisearch.search.windows.net/$metadata#datasources/$entity",
     "@odata.etag": "\"0x8DC59AEA85B6E01\"",
-    "name": "manuals-datasource",
+    "name": "manuals",
     "description": null,
     "type": "azureblob",
     "subtype": null,
