@@ -6,7 +6,7 @@
   "skills": [
     {
       "@odata.type": "#Microsoft.Skills.Text.SplitSkill",
-      "name": "#2",
+      "name": "#1",
       "description": "Split skill to chunk documents",
       "context": "/document",
       "defaultLanguageCode": "en",
@@ -29,7 +29,7 @@
     },
     {
       "@odata.type": "#Microsoft.Skills.Text.PIIDetectionSkill",
-      "name": "#1",
+      "name": "#2",
       "description": null,
       "context": "/document/pages/*",
       "defaultLanguageCode": "en",
@@ -42,7 +42,7 @@
       "inputs": [
         {
           "name": "text",
-          "source": "/document/pages/*/textItems/*"
+          "source": "/document/pages/*"
         }
       ],
       "outputs": [
@@ -62,7 +62,7 @@
       "description": null,
       "context": "/document/pages/*",
       "resourceUri": "https://mrtestai.openai.azure.com",
-      "apiKey": "<redacted>",
+      "apiKey": "OPENAI_API_KEY",
       "deploymentId": "mrtextembeddingada002",
       "inputs": [
         {

@@ -15,7 +15,7 @@ with open(file_path, "r") as file:
         #key, value = line.strip().split("=")
         variables.append((key, value))
 
-folder_path = os.path.join(os.getcwd(), ".debug")
+folder_path = os.path.join(os.getcwd(), "debug")
 if os.path.exists(folder_path):
     print("Folder exists")
 else:
