@@ -30,15 +30,15 @@
     ],
     "outputFieldMappings": [
       {
-        "sourceFieldName": "/document/content/pages/pii_entities",
+        "sourceFieldName": "/document/pages/pii_entities",
         "targetFieldName": "pii_entities"
       },
       {
-        "sourceFieldName": "/document/content/pages/masked_text",
+        "sourceFieldName": "/document/pages/masked_text",
         "targetFieldName": "masked_text"
       },
       {
-        "sourceFieldName": "/document/content/pages",
+        "sourceFieldName": "/document/pages",
         "targetFieldName": "content"
       }
     ],
