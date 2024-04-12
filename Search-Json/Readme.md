@@ -1,6 +1,17 @@
 ## .env file structure
 
-A .env file with following setting is needed. Then run preFiles.py. It will replace symbolic values with contents of .env and re-create the files in a ./debug directory. Use them to create your Search objects.
+
+### Setup
+
+1. Create Azure OpenAI, Search and Azure AI Services.
+2. Install required libraries:
+
+```
+pip install -r requirements.txt
+```
+
+3. In Azure Search create a data source pointing at your blob container with pdf files
+3. Create a .env file in the root folder (where all the json files are). Update with your settings.
 
 ```
 DATA_SOURCE_NAME=...
@@ -12,3 +23,13 @@ AI_SERVICE_KEY=...
 BLOB_CONNECTION_STRING=...
 BLOB_CONTAINER_NAME=...
 ```
+
+4. Run preFiles.py. It will replace symbolic values from the .env file create updated files in the ./debug directory. Use Azure portal and the json files to create the various articfacts in the following sequence:
+
+- Index
+- Skillset
+- Indexer
+
+
+
+.
