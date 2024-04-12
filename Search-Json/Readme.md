@@ -1,4 +1,4 @@
-## .env file structure
+## Json based Search artifact creation
 
 
 ### Setup
@@ -24,12 +24,12 @@ BLOB_CONNECTION_STRING=...
 BLOB_CONTAINER_NAME=...
 ```
 
-4. Run preFiles.py. It will replace symbolic values from the .env file create updated files in the ./debug directory. Use Azure portal and the json files to create the various articfacts in the following sequence:
+4. Run *preFiles.py*. It will replace symbolic values from the .env file create updated files in the ./debug directory. Use Azure portal and the json files to create the various articfacts in the following sequence:
 
 - Index
 - Skillset
 - Indexer
 
-
+When the indexer finished running, check its and index' status.
 
 .
