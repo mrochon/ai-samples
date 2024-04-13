@@ -61,9 +61,9 @@
       "name": "#3",
       "description": null,
       "context": "/document/chunks/*",
-      "resourceUri": "https://mrtestai.openai.azure.com",
+      "resourceUri": "OPENAI_RESOURCE_ID",
       "apiKey": "OPENAI_API_KEY",
-      "deploymentId": "mrtextembeddingada002",
+      "deploymentId": "OPENAI_ADA_DEPLOYMENT",
       "inputs": [
         {
           "name": "text",
@@ -95,10 +95,6 @@
                     "source": "/document/chunks/*"
                 },
                 {
-                    "name": "chunkVector",
-                    "source": "/document/chunks/*/vector"
-                },
-                {
                     "name": "pii_entities",
                     "source": "/document/chunks/*/pii_entities"
                 }
@@ -116,7 +112,7 @@
   },  
   "cognitiveServices": {
     "@odata.type": "#Microsoft.Azure.Search.CognitiveServicesByKey",
-    "description": "/subscriptions/56815821-7deb-4dce-8c2a-374756037a1e/resourceGroups/AI/providers/Microsoft.CognitiveServices/accounts/mraiskillsets",
+    "description": "COG_SERV_ACCOUNT",
     "key": "AI_SERVICE_KEY"
   },
   "knowledgeStore": null,

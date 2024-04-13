@@ -39,7 +39,7 @@
       },
       {
         "sourceFieldName": "/document/content/pages",
-        "targetFieldName": "content"
+        "targetFieldName": "chunk"
       }
     ],
     "cache": {
