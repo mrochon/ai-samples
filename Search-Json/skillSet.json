@@ -11,8 +11,8 @@
       "context": "/document",
       "defaultLanguageCode": "en",
       "textSplitMode": "pages",
-      "maximumPageLength": 300,
-      "pageOverlapLength": 50,
+      "maximumPageLength": 5000,
+      "pageOverlapLength": 750,
       "maximumPagesToTake": 0,
       "inputs": [
         {
@@ -23,7 +23,7 @@
       "outputs": [
         {
           "name": "textItems",
-          "targetName": "pages"
+          "targetName": "chunks"
         }
       ]
     },
@@ -31,7 +31,7 @@
       "@odata.type": "#Microsoft.Skills.Text.PIIDetectionSkill",
       "name": "#2",
       "description": null,
-      "context": "/document/pages/*",
+      "context": "/document/chunks/*",
       "defaultLanguageCode": "en",
       "minimumPrecision": 0.5,
       "maskingMode": "replace",
@@ -42,7 +42,7 @@
       "inputs": [
         {
           "name": "text",
-          "source": "/document/pages/*"
+          "source": "/document/chunks/*"
         }
       ],
       "outputs": [
@@ -60,14 +60,14 @@
       "@odata.type": "#Microsoft.Skills.Text.AzureOpenAIEmbeddingSkill",
       "name": "#3",
       "description": null,
-      "context": "/document/pages/*",
+      "context": "/document/chunks/*",
       "resourceUri": "https://mrtestai.openai.azure.com",
       "apiKey": "OPENAI_API_KEY",
       "deploymentId": "mrtextembeddingada002",
       "inputs": [
         {
           "name": "text",
-          "source": "/document/pages/*"
+          "source": "/document/chunks/*"
         }
       ],
       "outputs": [
@@ -79,12 +79,46 @@
       "authIdentity": null
     }
   ],
+  "indexProjections": {
+    "selectors": [
+        {
+            "targetIndexName": "INDEX_NAME",
+            "parentKeyFieldName": "ParentKey",
+            "sourceContext": "/document/pages/*",
+            "mappings": [
+                {
+                    "name": "path",
+                    "source": "/document/metadata_storage_path"
+                },
+                {
+                    "name": "chunk",
+                    "source": "/document/chunks/*"
+                },
+                {
+                    "name": "chunkVector",
+                    "source": "/document/chunks/*/vector"
+                },
+                {
+                    "name": "pii_entities",
+                    "source": "/document/chunks/*/pii_entities"
+                }
+                ,
+                {
+                    "name": "masked_text",
+                    "source": "/document/chunks/*/masked_text"
+                }
+            ]
+        }
+    ],
+    "parameters": {
+        "projectionMode": "skipIndexingParentDocuments"
+    }
+  },  
   "cognitiveServices": {
     "@odata.type": "#Microsoft.Azure.Search.CognitiveServicesByKey",
     "description": "/subscriptions/56815821-7deb-4dce-8c2a-374756037a1e/resourceGroups/AI/providers/Microsoft.CognitiveServices/accounts/mraiskillsets",
     "key": "AI_SERVICE_KEY"
   },
   "knowledgeStore": null,
-  "indexProjections": null,
   "encryptionKey": null
 }
