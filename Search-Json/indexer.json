@@ -28,20 +28,6 @@
         }
       }
     ],
-    "outputFieldMappings": [
-      {
-        "sourceFieldName": "/document/content/pages/pii_entities",
-        "targetFieldName": "pii_entities"
-      },
-      {
-        "sourceFieldName": "/document/content/pages/masked_text",
-        "targetFieldName": "masked_text"
-      },
-      {
-        "sourceFieldName": "/document/content/pages",
-        "targetFieldName": "content"
-      }
-    ],
     "cache": {
       "id": "8585a365-19de-4c50-9e05-d9f0059986ef",
       "enableReprocessing": true,

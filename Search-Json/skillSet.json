@@ -84,7 +84,7 @@
         {
             "targetIndexName": "INDEX_NAME",
             "parentKeyFieldName": "ParentKey",
-            "sourceContext": "/document/pages/*",
+            "sourceContext": "/document/chunks/*",
             "mappings": [
                 {
                     "name": "path",
