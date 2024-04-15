@@ -33,11 +33,11 @@
       "description": null,
       "context": "/document/chunks/*",
       "defaultLanguageCode": "en",
-      "minimumPrecision": 0.5,
+      "minimumPrecision": 0.7,
       "maskingMode": "replace",
       "maskingCharacter": "*",
       "modelVersion": null,
-      "piiCategories": [],
+      "piiCategories": ["person", "phone_number", "ip_address", "credit_card_number", "social_security_number", "bank_account_number", "passport_number", "driver_license_number"],
       "domain": "none",
       "inputs": [
         {
