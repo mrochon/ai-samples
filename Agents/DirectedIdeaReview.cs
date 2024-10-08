@@ -35,7 +35,7 @@ internal class DirectedIdeaReview: ChattingAgentsBase
         """;
 
 #pragma warning disable SKEXP0110 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-    public override async Task GroupChatAsync()
+    public async override Task GroupChatAsync()
     {
         // Define the agents
         ChatCompletionAgent agentReviewer =
@@ -127,6 +127,7 @@ internal class DirectedIdeaReview: ChattingAgentsBase
             };
 
         // Invoke chat and display messages.
+        //ChatMessageContent message = new(AuthorRole.User, "concept: a boat named for time of day.");
         ChatMessageContent message = new(AuthorRole.User, "concept: maps made out of egg cartons.");
         chat.AddChatMessage(message);
         this.WriteAgentChatMessage(message);
