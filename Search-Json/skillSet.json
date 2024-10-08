@@ -10,7 +10,7 @@
       "description": "Split skill to chunk documents",
       "context": "/document",
       "defaultLanguageCode": "en",
-      "textSplitMode": "pages",
+      "textSplitMode": "sentences",
       "maximumPageLength": 5000,
       "pageOverlapLength": 750,
       "maximumPagesToTake": 0,
