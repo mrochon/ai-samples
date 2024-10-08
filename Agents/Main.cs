@@ -5,11 +5,12 @@ using Microsoft.Extensions.Logging;
 internal class Main : IHostedService
 {
     private readonly ILogger<Main> _logger;
-    private readonly IdeaReview _ideaReview;
+    //private readonly RoundRobinIdeaReview _ideaReview;
+    private readonly IChattingAgents _ideaReview;
 
     public Main(
         ILogger<Main> logger,
-        IdeaReview ideaReview
+        IChattingAgents ideaReview
         )
     {
         _logger = logger;
@@ -18,7 +19,7 @@ internal class Main : IHostedService
     public async Task StartAsync(CancellationToken cancellationToken)
     {
         _logger.LogTrace("Main Started");
-        await _ideaReview.UseAgentGroupChatWithTwoAgentsAsync();
+        await _ideaReview.GroupChatAsync();
         _logger.LogTrace("done");
         await StopAsync(cancellationToken);
     }
@@ -28,5 +29,4 @@ internal class Main : IHostedService
         Console.WriteLine("Stopped");
         return Task.CompletedTask;
     }
-
 }

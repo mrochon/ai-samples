@@ -19,7 +19,9 @@ builder.Configuration
 builder.Services.AddOptions()
     .Configure<AzureOpenAIOptions>(builder.Configuration.GetSection("AzureOpenAI"))
     .AddLogging(builder => builder.AddConsole())
-    .AddScoped<IdeaReview>()
+    .AddScoped<IChattingAgents, DirectedIdeaReview>()
+    //.AddScoped<RoundRobinIdeaReview>()
+    //.AddScoped<DirectedIdeaReview>()
     .AddHostedService<Main>();
 
 builder.Build().Run();
