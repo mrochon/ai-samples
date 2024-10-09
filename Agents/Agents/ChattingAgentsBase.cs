@@ -13,7 +13,7 @@ internal interface IChattingAgents
 
 abstract class ChattingAgentsBase: IChattingAgents
 {
-    private readonly AzureOpenAIOptions _aiOptions;
+    protected readonly AzureOpenAIOptions _aiOptions;
     protected ChattingAgentsBase(IOptions<AzureOpenAIOptions> options)
     {
         if ((options is null) || (options.Value is null))
