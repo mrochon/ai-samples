@@ -20,6 +20,7 @@ builder.Services.AddOptions()
     .Configure<AzureOpenAIOptions>(builder.Configuration.GetSection("AzureOpenAI"))
     .AddLogging(builder => builder.AddConsole())
     .AddTransient<IChattingAgents, DirectedIdeaReview>()
+    .AddTransient<ChartAssistant>()
     //.AddScoped<RoundRobinIdeaReview>()
     //.AddScoped<DirectedIdeaReview>()
     .AddHostedService<Main>();
